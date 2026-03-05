@@ -1,0 +1,164 @@
+{
+  "brand_identity": {
+    "name": "Léomentia Event",
+    "founder": "Virginie Bocquelet",
+    "mission": "Create elegant, emotional, and premium wedding experiences that inspire trust and serenity.",
+    "tone": "Elegant, Romantic, High-end, Minimalist, Serene, Professional",
+    "aesthetic": "Editorial Magazine Style, Airy, Sophisticated"
+  },
+  "typography": {
+    "font_family": {
+      "headings": "\"Poiret One\", cursive",
+      "body": "\"Asap\", sans-serif"
+    },
+    "google_fonts_import": "https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Poiret+One&display=swap",
+    "usage_rules": {
+      "headings": "Use Poiret One for all H1-H6. Letter spacing should be slightly wide (tracking-wide) for elegance. Font weight usually 400 (Regular) as the font is naturally decorative.",
+      "body": "Use Asap for all paragraphs, labels, and buttons. Keep line-height loose (leading-relaxed) for readability.",
+      "hero_text": "H1 should be large (text-5xl to text-7xl) and emotive.",
+      "section_titles": "H2 should be elegant, often centered or accompanied by a decorative line."
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": "#3d211a",
+      "secondary": "#f7d58f",
+      "accent": "#99824d",
+      "background": "#FFFCF8",
+      "surface": "#FFFFFF",
+      "text_main": "#3d211a",
+      "text_muted": "#6d5e5b",
+      "border": "#e6dccf"
+    },
+    "tailwind_config_extension": {
+      "colors": {
+        "coffee": {
+          "DEFAULT": "#3d211a",
+          "light": "#5c3a32",
+          "50": "#fbf7f6",
+          "100": "#f5ede9",
+          "900": "#3d211a"
+        },
+        "peach": {
+          "DEFAULT": "#f7d58f",
+          "light": "#fae6b8",
+          "50": "#fefbf4",
+          "100": "#fdf5e3"
+        },
+        "gold": {
+          "DEFAULT": "#99824d",
+          "light": "#b39b66",
+          "dark": "#7a663a"
+        },
+        "cream": "#FFFCF8"
+      }
+    },
+    "usage": {
+      "background": "Use 'cream' (#FFFCF8) as the main page background to avoid harsh stark white.",
+      "text": "Use 'coffee' (#3d211a) for almost all text. Never use pure black.",
+      "buttons": "Primary buttons: Gold background, Coffee text. Secondary: Coffee border, Coffee text.",
+      "accents": "Use Gold for icons, thin borders, and decorative lines."
+    }
+  },
+  "layout": {
+    "grid_system": "Bento Grid Mode A (Tetris) for galleries and feature sections. Use generous padding (p-12 to p-24) between sections.",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "spacing": {
+      "section_gap": "py-24 or py-32",
+      "element_gap": "gap-8 or gap-12"
+    },
+    "z_index": {
+      "sticky_nav": 50,
+      "modal": 100,
+      "dropdown": 40
+    }
+  },
+  "components": {
+    "buttons": {
+      "style": "Sharp or slightly rounded-md (radius-sm). Elegant, not bubbly.",
+      "hover": "Subtle transform (-translate-y-0.5) and shadow-lg.",
+      "classes": "font-asap font-medium tracking-wide uppercase text-sm px-8 py-3 transition-all duration-300"
+    },
+    "cards": {
+      "style": "Minimalist. White background, very subtle border (border-coffee/10), soft shadow (shadow-sm).",
+      "hover": "shadow-md border-gold/30 transition-all duration-300"
+    },
+    "navigation": {
+      "style": "Sticky, Glassmorphism (bg-white/80 backdrop-blur-md).",
+      "links": "Poiret One or Asap. Hover: text-gold transition-colors."
+    },
+    "forms": {
+      "style": "Minimalist inputs. No background (bg-transparent), bottom border only (border-b border-coffee/20) OR clean white inputs with thin coffee borders.",
+      "focus": "border-gold ring-0 focus:border-gold transition-colors"
+    }
+  },
+  "visual_enhancers": {
+    "shadows": {
+      "soft": "0 4px 20px -2px rgba(61, 33, 26, 0.05)",
+      "hover": "0 10px 25px -5px rgba(61, 33, 26, 0.1)"
+    },
+    "borders": "1px solid rgba(61, 33, 26, 0.1)",
+    "glassmorphism": "bg-white/70 backdrop-blur-lg border border-white/20",
+    "textures": "Consider a very subtle grain overlay on the 'cream' background for a paper-like feel."
+  },
+  "motion": {
+    "library": "framer-motion",
+    "guidelines": {
+      "page_load": "Staggered fade-in for hero elements.",
+      "scroll": "Elements should gently fade up (y: 20 -> 0, opacity: 0 -> 1) as they enter viewport.",
+      "hover": "Slow, smooth transitions (duration-300 ease-out).",
+      "parallax": "Use subtle parallax on large background images in the Hero or Quote sections."
+    }
+  },
+  "images": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1770301312385-7a4ba2f12147?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxicmlkZSUyMGdyb29tJTIwcm9tYW50aWMlMjBzdW5zZXQlMjBzaWxob3VldHRlfGVufDB8fHx8MTc3Mjc0MTU5NHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Romantic silhouette of bride and groom at sunset",
+      "usage": "Full width hero background with overlay"
+    },
+    "about_founder": {
+      "url": "https://images.unsplash.com/photo-1709378739270-72e7179e554d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBmZW1hbGUlMjB3ZWRkaW5nJTIwcGxhbm5lciUyMGVsZWdhbnQlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzI3NDE2MTN8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Virginie Bocquelet - Founder",
+      "usage": "About section, circular or arch mask"
+    },
+    "services_planning": {
+      "url": "https://images.unsplash.com/photo-1761110840708-9d6814876068?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3ZWRkaW5nJTIwdGFibGUlMjBzZXR0aW5nJTIwZ29sZCUyMGVsZWdhbnR8ZW58MHx8fHwxNzcyNzQxNTg5fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Luxury table setting",
+      "usage": "Service card: Full Planning"
+    },
+    "services_coordination": {
+      "url": "https://images.unsplash.com/photo-1758315526786-3ef1e3b07f7b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxjaGFtcGFnbmUlMjBnbGFzc2VzJTIwdG9hc3QlMjBjZWxlYnJhdGlvbiUyMGx1eHVyeXxlbnwwfHx8fDE3NzI3NDE2MjF8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Champagne toast",
+      "usage": "Service card: D-Day Coordination"
+    },
+    "services_decoration": {
+      "url": "https://images.unsplash.com/photo-1768404768678-1597773abd28?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwZmxvcmFsJTIwYXJyYW5nZW1lbnQlMjBwYXN0ZWwlMjBmbG93ZXJzfGVufDB8fHx8MTc3Mjc0MTU5OHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Floral decoration",
+      "usage": "Service card: Decoration"
+    },
+    "gallery_highlights": [
+      "https://images.unsplash.com/photo-1758995115475-7b7d6eb060ba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcmluZ3MlMjBnb2xkJTIwdmVsdmV0JTIwYm94JTIwZGV0YWlsfGVufDB8fHx8MTc3Mjc0MTYxN3ww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1764269710986-0b69be00d7ca?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwd2VkZGluZyUyMGNha2UlMjB3aGl0ZSUyMGZsb3JhbHxlbnwwfHx8fDE3NzI3NDE2MjZ8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1768851142314-c4ebf49ad45b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjB3ZWRkaW5nJTIwdGFibGUlMjBzZXR0aW5nJTIwZ29sZCUyMGVsZWdhbnR8ZW58MHx8fHwxNzcyNzQxNTg5fDA&ixlib=rb-4.1.0&q=85"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. INSTALL FONTS: Add the Google Fonts import link to the <head> of public/index.html immediately.",
+    "2. CONFIGURE TAILWIND: Update tailwind.config.js with the 'coffee', 'peach', 'gold', and 'cream' colors defined in the colors section. Extend the font family to include 'Poiret One' and 'Asap'.",
+    "3. GLOBAL STYLES: Update index.css to set the body background to 'cream' and text to 'coffee'. Remove default React styles.",
+    "4. ICONS: Use 'lucide-react' for all icons. Keep them thin (stroke-width={1.5}) to match the elegance of the brand.",
+    "5. COMPONENTS: Build the 'Services' section using the 'Bento Grid' layout. Do not use simple rows.",
+    "6. IMAGES: Use the provided Unsplash URLs. Do not use placeholders.",
+    "7. NAVIGATION: Create a transparent-to-glass sticky navbar. It should be transparent at the top and become glassmorphic on scroll.",
+    "8. TESTIMONIALS: Use a carousel (embla-carousel-react) for testimonials to save vertical space.",
+    "9. CONTACT: The contact form must be elegant. Use 'gold' for the active border color.",
+    "10. FOOTER: Large footer with 'Poiret One' logo, social links, and a 'Let's create magic together' CTA."
+  ],
+  "universal_guidelines": [
+    "Avoid generic 'AI slop' designs. No default blue/gray buttons.",
+    "Use 2-3x more spacing than usual. This is a luxury brand.",
+    "Every interaction needs a micro-animation.",
+    "Do not use purple or teal. Stick strictly to the Coffee/Gold/Peach palette.",
+    "Ensure all text has sufficient contrast against the cream background."
+  ]
+}
