@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import logoLight from '@/assets/logo-light.svg';
+import logoDark from '@/assets/logo-dark.svg';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +36,11 @@ const Navigation = () => {
     return location.pathname.startsWith(path);
   };
 
+  // On the homepage, before scrolling, the nav sits over a dark hero image,
+  // so text must be light to stay visible. Elsewhere (or once scrolled) use coffee.
+  const lightMode = location.pathname === '/' && !isScrolled;
+  const baseText = lightMode ? 'text-cream' : 'text-coffee';
+
   return (
     <nav
       data-testid="main-navigation"
@@ -47,14 +54,13 @@ const Navigation = () => {
           <Link
             to="/"
             data-testid="logo-link"
-            className="flex items-center space-x-2"
+            className="flex items-center"
           >
-            <span className="font-poiret text-2xl sm:text-3xl text-coffee tracking-wider">
-              Léomentia
-            </span>
-            <span className="font-asap text-xs text-gold uppercase tracking-widest hidden sm:inline">
-              Event
-            </span>
+            <img
+              src={lightMode ? logoLight : logoDark}
+              alt="Léomentia Event"
+              className="h-12 sm:h-14 w-auto transition-opacity duration-300"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -67,7 +73,7 @@ const Navigation = () => {
                 className={`font-asap text-sm tracking-wide transition-colors duration-300 elegant-link ${
                   isActive(link.path)
                     ? 'text-gold'
-                    : 'text-coffee hover:text-gold'
+                    : `${baseText} hover:text-gold`
                 }`}
               >
                 {link.label}
@@ -79,7 +85,7 @@ const Navigation = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <a
               href="tel:0661865155"
-              className="flex items-center text-coffee hover:text-gold transition-colors"
+              className={`flex items-center hover:text-gold transition-colors ${baseText}`}
             >
               <Phone className="w-4 h-4 mr-2" strokeWidth={1.5} />
               <span className="font-asap text-sm">06 61 86 51 55</span>
@@ -100,7 +106,7 @@ const Navigation = () => {
           <button
             data-testid="mobile-menu-button"
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 text-coffee hover:text-gold transition-colors"
+            className={`lg:hidden p-2 hover:text-gold transition-colors ${baseText}`}
           >
             {isOpen ? (
               <X className="w-6 h-6" strokeWidth={1.5} />

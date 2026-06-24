@@ -91,6 +91,13 @@ code {
     -webkit-backdrop-filter: blur(12px);
 }
 
+/* Navigation glass effect (scrolled state) */
+.nav-glass {
+    background: rgba(255, 252, 248, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
 /* Elegant link underline effect */
 .elegant-link {
     position: relative;
