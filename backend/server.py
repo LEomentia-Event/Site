@@ -26,6 +26,7 @@ BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', '')
 BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Léomentia Event')
 RECIPIENT_EMAIL = 'virginie.bocquelet.pro@gmail.com'
 BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
+INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://taplink.cc/virginie.leomentia')
 
 # Create the main app
 app = FastAPI()
@@ -128,6 +129,40 @@ class GalleryItemCreate(BaseModel):
 async def root():
     return {"message": "Léomentia Event API"}
 
+async def send_brevo_email(to_email: str, to_name: str, subject: str, html_content: str, reply_to: Optional[dict] = None):
+    """Send a single transactional email via Brevo. Returns True on success."""
+    if not (BREVO_API_KEY and BREVO_SENDER_EMAIL):
+        logger.warning("BREVO_API_KEY/BREVO_SENDER_EMAIL not configured; email skipped")
+        return False
+    payload = {
+        "sender": {"email": BREVO_SENDER_EMAIL, "name": BREVO_SENDER_NAME},
+        "to": [{"email": to_email, "name": to_name}],
+        "subject": subject,
+        "htmlContent": html_content,
+    }
+    if reply_to:
+        payload["replyTo"] = reply_to
+    try:
+        async with httpx.AsyncClient(timeout=15) as http_client:
+            resp = await http_client.post(
+                BREVO_API_URL,
+                headers={
+                    "api-key": BREVO_API_KEY,
+                    "content-type": "application/json",
+                    "accept": "application/json",
+                },
+                json=payload,
+            )
+        if resp.status_code in (200, 201):
+            logger.info(f"Brevo email sent to {to_email} ({subject})")
+            return True
+        logger.error(f"Brevo email failed ({resp.status_code}) to {to_email}: {resp.text}")
+        return False
+    except Exception as e:
+        logger.error(f"Failed to send Brevo email to {to_email}: {str(e)}")
+        return False
+
+
 # Contact endpoints
 @api_router.post("/contact", response_model=ContactForm)
 async def submit_contact_form(form_data: ContactFormCreate):
@@ -137,10 +172,8 @@ async def submit_contact_form(form_data: ContactFormCreate):
     
     await db.contacts.insert_one(doc)
     
-    # Send email notification via Brevo
-    if BREVO_API_KEY and BREVO_SENDER_EMAIL:
-        try:
-            html_content = f"""
+    # 1) Notification email to Virginie
+    admin_html = f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                 <h2 style="color: #3d211a; border-bottom: 2px solid #99824d; padding-bottom: 10px;">
                     Nouvelle demande de contact - Léomentia Event
@@ -161,36 +194,50 @@ async def submit_contact_form(form_data: ContactFormCreate):
                 </p>
             </div>
             """
-            
-            payload = {
-                "sender": {"email": BREVO_SENDER_EMAIL, "name": BREVO_SENDER_NAME},
-                "to": [{"email": RECIPIENT_EMAIL, "name": "Virginie Bocquelet"}],
-                "replyTo": {"email": contact.email, "name": contact.name},
-                "subject": f"Nouvelle demande de {contact.name} - Léomentia Event",
-                "htmlContent": html_content,
-            }
+    await send_brevo_email(
+        to_email=RECIPIENT_EMAIL,
+        to_name="Virginie Bocquelet",
+        subject=f"Nouvelle demande de {contact.name} - Léomentia Event",
+        html_content=admin_html,
+        reply_to={"email": contact.email, "name": contact.name},
+    )
 
-            async with httpx.AsyncClient(timeout=15) as http_client:
-                resp = await http_client.post(
-                    BREVO_API_URL,
-                    headers={
-                        "api-key": BREVO_API_KEY,
-                        "content-type": "application/json",
-                        "accept": "application/json",
-                    },
-                    json=payload,
-                )
-            if resp.status_code in (200, 201):
-                logger.info(f"Brevo email sent for contact: {contact.email}")
-            else:
-                logger.error(f"Brevo email failed ({resp.status_code}): {resp.text}")
-        except Exception as e:
-            logger.error(f"Failed to send Brevo email: {str(e)}")
-    else:
-        logger.warning(
-            "BREVO_API_KEY/BREVO_SENDER_EMAIL not configured; contact saved without email"
-        )
-    
+    # 2) Confirmation email to the client
+    first_name = contact.name.split(' ')[0] if contact.name else ''
+    client_html = f"""
+            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 600px; margin: 0 auto; background: #FFFCF8; padding: 40px 32px; color: #3d211a;">
+                <p style="text-align: center; letter-spacing: 4px; text-transform: uppercase; font-size: 12px; color: #99824d; font-family: Arial, sans-serif; margin-bottom: 24px;">
+                    Léomentia Event
+                </p>
+                <p style="font-size: 16px; line-height: 1.7;">Bonjour {first_name},</p>
+                <p style="font-size: 16px; line-height: 1.7;">
+                    Je vous remercie chaleureusement pour votre message et pour l'intérêt que vous portez à mon travail.
+                </p>
+                <p style="font-size: 16px; line-height: 1.7;">
+                    C'est toujours un immense plaisir de découvrir de nouveaux projets et d'imaginer les contours d'un événement unique, sur mesure et qui vous ressemble.
+                </p>
+                <p style="font-size: 16px; line-height: 1.7;">
+                    Votre demande est bien arrivée entre mes mains. Je l'étudie avec la plus grande attention et je reviens vers vous sous <strong>48 heures (jours ouvrés)</strong> pour que nous puissions échanger de vive voix sur vos envies, vos attentes et l'organisation de ce joli moment.
+                </p>
+                <p style="font-size: 16px; line-height: 1.7;">
+                    En attendant, n'hésitez pas à faire un tour sur <a href="{INSTAGRAM_URL}" style="color: #99824d; font-weight: bold; text-decoration: none;">mon compte Instagram</a> pour découvrir mon univers et mes dernières réalisations.
+                </p>
+                <p style="font-size: 16px; line-height: 1.7; margin-top: 28px;">À très bientôt,</p>
+                <p style="font-family: 'Georgia', serif; font-size: 22px; color: #99824d; margin-top: 4px;">Virginie</p>
+                <hr style="border: none; border-top: 1px solid #e6ddcf; margin: 32px 0 16px;" />
+                <p style="text-align: center; font-size: 12px; color: #99824d; font-family: Arial, sans-serif;">
+                    Léomentia Event — Wedding Planner &amp; Designer
+                </p>
+            </div>
+            """
+    await send_brevo_email(
+        to_email=contact.email,
+        to_name=contact.name,
+        subject="Léomentia Event \u2728 Parlons de votre joli projet",
+        html_content=client_html,
+        reply_to={"email": RECIPIENT_EMAIL, "name": "Virginie - Léomentia Event"},
+    )
+
     return contact
 
 @api_router.get("/contacts", response_model=List[ContactForm])

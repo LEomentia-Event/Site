@@ -38,6 +38,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 
 ## Backlog / Prochaines actions
 - ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo — testé e2e.
+- ✅ (Fait) Email de confirmation automatique au client (objet « Léomentia Event ✨ Parlons de votre joli projet », prénom auto, lien Instagram) en plus de la notification à Virginie.
+- 🟢 Confirmer/ajuster le lien Instagram de l'email client : actuellement `INSTAGRAM_URL` (env, défaut = taplink https://taplink.cc/virginie.leomentia).
 - 🟠 Auto-seed des données (galerie/témoignages/blog) au démarrage ou via script de déploiement — la base est vide sur un déploiement neuf (seed manuel via POST /api/seed).
 - P1 : a11y — ajouter un `DialogTitle` (visually-hidden) dans la lightbox de la galerie (warning Radix).
 - P2 : Intégrer les vraies photos de mariage fournies par la cliente dans la galerie/seed.
