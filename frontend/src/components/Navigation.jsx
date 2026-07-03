@@ -70,7 +70,7 @@ const Navigation = () => {
                 key={link.path}
                 to={link.path}
                 data-testid={`nav-link-${link.label.toLowerCase()}`}
-                className={`font-asap text-sm tracking-wide transition-colors duration-300 elegant-link ${
+                className={`font-poppins text-sm tracking-wide transition-colors duration-300 elegant-link ${
                   isActive(link.path)
                     ? 'text-gold'
                     : `${baseText} hover:text-gold`
@@ -88,7 +88,7 @@ const Navigation = () => {
               className={`flex items-center hover:text-gold transition-colors ${baseText}`}
             >
               <Phone className="w-4 h-4 mr-2" strokeWidth={1.5} />
-              <span className="font-asap text-sm">06 61 86 51 55</span>
+              <span className="font-poppins text-sm">06 61 86 51 55</span>
             </a>
             <a
               href="https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia"
@@ -96,7 +96,7 @@ const Navigation = () => {
               rel="noopener noreferrer"
               data-testid="cta-calendly-nav"
             >
-              <Button className="bg-gold hover:bg-gold-dark text-white font-asap text-sm tracking-wide px-6 py-2 btn-shine">
+              <Button className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm tracking-wide px-6 py-2 btn-shine">
                 Réserver un appel
               </Button>
             </a>
@@ -130,7 +130,7 @@ const Navigation = () => {
               key={link.path}
               to={link.path}
               data-testid={`mobile-nav-link-${link.label.toLowerCase()}`}
-              className={`font-poiret text-2xl tracking-wide transition-colors duration-300 ${
+              className={`font-cormorant text-2xl tracking-wide transition-colors duration-300 ${
                 isActive(link.path)
                   ? 'text-gold'
                   : 'text-coffee hover:text-gold'
@@ -145,14 +145,14 @@ const Navigation = () => {
               className="flex items-center text-coffee hover:text-gold transition-colors"
             >
               <Phone className="w-5 h-5 mr-2" strokeWidth={1.5} />
-              <span className="font-asap">06 61 86 51 55</span>
+              <span className="font-poppins">06 61 86 51 55</span>
             </a>
             <a
               href="https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="bg-gold hover:bg-gold-dark text-white font-asap tracking-wide px-8 py-3">
+              <Button className="bg-gold hover:bg-gold-dark text-white font-poppins tracking-wide px-8 py-3">
                 Réserver un appel
               </Button>
             </a>

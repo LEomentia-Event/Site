@@ -8,8 +8,10 @@ module.exports = {
   theme: {
         extend: {
                 fontFamily: {
+                        'cormorant': ['"Cormorant Garamond"', 'serif'],
+                        'poppins': ['"Poppins"', 'sans-serif'],
                         'poiret': ['"Poiret One"', 'cursive'],
-                        'asap': ['"Asap"', 'sans-serif'],
+                        'asap': ['"Poppins"', 'sans-serif'],
                 },
                 borderRadius: {
                         lg: 'var(--radius)',

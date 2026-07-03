@@ -12,14 +12,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <h3 className="font-poiret text-4xl text-peach tracking-wider">
+              <h3 className="font-cormorant text-4xl text-peach tracking-wider">
                 Léomentia
               </h3>
-              <span className="font-asap text-sm text-peach/70 uppercase tracking-widest">
+              <span className="font-poppins text-sm text-peach/70 uppercase tracking-widest">
                 Event
               </span>
             </Link>
-            <p className="font-asap text-cream/80 leading-relaxed max-w-md mb-8">
+            <p className="font-poppins text-cream/80 leading-relaxed max-w-md mb-8">
               Wedding Planner & Designer. J'accompagne les futurs mariés dans
               l'organisation de leur mariage pour leur permettre de vivre
               pleinement chaque instant.
@@ -48,7 +48,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-poiret text-xl text-peach mb-6 tracking-wide">
+            <h4 className="font-cormorant text-xl text-peach mb-6 tracking-wide">
               Navigation
             </h4>
             <ul className="space-y-3">
@@ -63,7 +63,7 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="font-asap text-cream/70 hover:text-peach transition-colors"
+                    className="font-poppins text-cream/70 hover:text-peach transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -74,14 +74,14 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="font-poiret text-xl text-peach mb-6 tracking-wide">
+            <h4 className="font-cormorant text-xl text-peach mb-6 tracking-wide">
               Contact
             </h4>
             <ul className="space-y-4">
               <li>
                 <a
                   href="tel:0661865155"
-                  className="flex items-start font-asap text-cream/70 hover:text-peach transition-colors"
+                  className="flex items-start font-poppins text-cream/70 hover:text-peach transition-colors"
                 >
                   <Phone
                     className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"
@@ -93,7 +93,7 @@ const Footer = () => {
               <li>
                 <a
                   href="mailto:virginie.bocquelet.pro@gmail.com"
-                  className="flex items-start font-asap text-cream/70 hover:text-peach transition-colors"
+                  className="flex items-start font-poppins text-cream/70 hover:text-peach transition-colors"
                 >
                   <Mail
                     className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"
@@ -102,7 +102,7 @@ const Footer = () => {
                   virginie.bocquelet.pro@gmail.com
                 </a>
               </li>
-              <li className="flex items-start font-asap text-cream/70">
+              <li className="flex items-start font-poppins text-cream/70">
                 <MapPin
                   className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"
                   strokeWidth={1.5}
@@ -118,10 +118,10 @@ const Footer = () => {
       <div className="border-t border-cream/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <p className="font-asap text-sm text-cream/60 flex items-center">
+            <p className="font-poppins text-sm text-cream/60 flex items-center">
               © {currentYear} Léomentia Event. Tous droits réservés.
             </p>
-            <p className="font-asap text-sm text-cream/60 flex items-center">
+            <p className="font-poppins text-sm text-cream/60 flex items-center">
               Fait avec{' '}
               <Heart className="w-4 h-4 mx-1 text-peach" strokeWidth={1.5} />{' '}
               pour les futurs mariés

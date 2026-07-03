@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,100..900;1,100..900&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@200;300;400;500;600&family=Poiret+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -34,9 +34,14 @@
     }
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #FFFCF8;
@@ -44,8 +49,15 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poiret One', cursive;
-    letter-spacing: 0.05em;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+/* Text selection */
+::selection {
+    background: #99824d;
+    color: #FFFCF8;
 }
 
 code {
@@ -93,9 +105,26 @@ code {
 
 /* Navigation glass effect (scrolled state) */
 .nav-glass {
-    background: rgba(255, 252, 248, 0.85);
+    background: rgba(255, 252, 248, 0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(153, 130, 77, 0.18);
+}
+
+/* Subtle grain / noise texture overlay for dark sections (adds warmth & depth) */
+.grain {
+    position: relative;
+    isolation: isolate;
+}
+.grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
 }
 
 /* Elegant link underline effect */
@@ -116,6 +145,60 @@ code {
 
 .elegant-link:hover::after {
     width: 100%;
+}
+
+/* Gold underline accent for key phrases */
+.gold-underline {
+    background-image: linear-gradient(transparent 60%, rgba(247, 213, 143, 0.4) 60%);
+    background-repeat: no-repeat;
+}
+
+/* Editorial section divider */
+.section-divider {
+    width: 70px;
+    height: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    background: linear-gradient(to right, transparent, #99824d, transparent);
+}
+
+/* Image hover zoom */
+.img-zoom img {
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.img-zoom:hover img {
+    transform: scale(1.05);
+}
+
+/* Button shine effect */
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+}
+.btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: left 0.6s ease;
+}
+.btn-shine:hover::before {
+    left: 130%;
+}
+
+/* Scroll reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @layer base {

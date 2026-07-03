@@ -1,0 +1,18 @@
+{
+  "summary": "Verified prices were removed from 'Mes accompagnements' / Services areas on HOME and SERVICES pages. Only 'À partir de 1 200€' mention displays (via services-price-mention-home and services-price-mention testids). No individual formula prices, no option card prices, no per-item euro amounts remain in the DOM.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": ["Unused price fields still live in JS data arrays in ServicesPage.jsx/HomePage.jsx — safe (not rendered) but consider cleaning up to avoid future stale data drift."],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Home & Services price-removal verified. Regex scan of page text found only ' 1 200€' on each page. All 4 formulas render titles/desc/features, Populaire badge on 'complete', all 4 CTAs wrap-anchor href=https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia. Note: cta-service-* testids are on the <button> nested inside <a>, so getAttribute('href') on the button is null — use closest('a') to read href."
+}

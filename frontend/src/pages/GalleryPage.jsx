@@ -62,13 +62,13 @@ const GalleryPage = () => {
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+          <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
             Portfolio
           </span>
-          <h1 className="font-poiret text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
+          <h1 className="font-cormorant text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
             Des mariages pensés dans les moindres détails
           </h1>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto">
             Découvrez une sélection de mariages et événements que j'ai eu le
             plaisir d'accompagner.
           </p>
@@ -85,7 +85,7 @@ const GalleryPage = () => {
                 data-testid={`filter-${category.toLowerCase()}`}
                 onClick={() => setActiveCategory(category)}
                 variant={activeCategory === category ? 'default' : 'outline'}
-                className={`font-asap text-sm ${
+                className={`font-poppins text-sm ${
                   activeCategory === category
                     ? 'bg-gold hover:bg-gold-dark text-white'
                     : 'border-coffee/20 text-coffee hover:bg-coffee/5'
@@ -103,11 +103,11 @@ const GalleryPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">Chargement...</p>
+              <p className="font-poppins text-coffee/60">Chargement...</p>
             </div>
           ) : filteredGallery.length === 0 ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">
+              <p className="font-poppins text-coffee/60">
                 Aucune image dans cette catégorie
               </p>
             </div>
@@ -127,10 +127,10 @@ const GalleryPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-coffee/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                     <div>
-                      <h3 className="font-poiret text-xl text-white mb-1">
+                      <h3 className="font-cormorant text-xl text-white mb-1">
                         {item.title}
                       </h3>
-                      <span className="font-asap text-sm text-peach">
+                      <span className="font-poppins text-sm text-peach">
                         {item.category}
                       </span>
                     </div>
@@ -178,11 +178,11 @@ const GalleryPage = () => {
                   className="w-full max-h-[80vh] object-contain rounded-lg"
                 />
                 <div className="mt-4 text-center">
-                  <h3 className="font-poiret text-2xl text-white">
+                  <h3 className="font-cormorant text-2xl text-white">
                     {selectedImage.title}
                   </h3>
                   {selectedImage.description && (
-                    <p className="font-asap text-cream/70 mt-2">
+                    <p className="font-poppins text-cream/70 mt-2">
                       {selectedImage.description}
                     </p>
                   )}
@@ -196,10 +196,10 @@ const GalleryPage = () => {
       {/* CTA */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl sm:text-4xl text-coffee mb-6">
+          <h2 className="font-cormorant text-3xl sm:text-4xl text-coffee mb-6">
             Envie de créer votre propre histoire ?
           </h2>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto mb-10">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto mb-10">
             Chaque mariage est unique. Discutons ensemble de votre vision pour
             créer un événement qui vous ressemble.
           </p>
@@ -210,7 +210,7 @@ const GalleryPage = () => {
           >
             <Button
               data-testid="cta-calendly-gallery"
-              className="bg-gold hover:bg-gold-dark text-white font-asap text-sm uppercase tracking-wider px-10 py-6"
+              className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-10 py-6"
             >
               Réserver un appel découverte
             </Button>

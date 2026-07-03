@@ -39,13 +39,13 @@ const BlogPage = () => {
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+          <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
             Blog
           </span>
-          <h1 className="font-poiret text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
+          <h1 className="font-cormorant text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
             Conseils & Inspirations
           </h1>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto">
             Retrouvez mes conseils pour organiser votre mariage sereinement,
             ainsi que des inspirations pour créer un événement qui vous
             ressemble.
@@ -58,11 +58,11 @@ const BlogPage = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">Chargement...</p>
+              <p className="font-poppins text-coffee/60">Chargement...</p>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">
+              <p className="font-poppins text-coffee/60">
                 Aucun article pour le moment
               </p>
             </div>
@@ -84,22 +84,22 @@ const BlogPage = () => {
                     </div>
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4 mb-4">
-                        <span className="font-asap text-xs text-gold uppercase tracking-wide px-3 py-1 bg-gold/10 rounded-full">
+                        <span className="font-poppins text-xs text-gold uppercase tracking-wide px-3 py-1 bg-gold/10 rounded-full">
                           {post.category}
                         </span>
                       </div>
-                      <h2 className="font-poiret text-xl text-coffee mb-3 group-hover:text-gold transition-colors">
+                      <h2 className="font-cormorant text-xl text-coffee mb-3 group-hover:text-gold transition-colors">
                         {post.title}
                       </h2>
-                      <p className="font-asap text-coffee/70 text-sm mb-4 line-clamp-2">
+                      <p className="font-poppins text-coffee/70 text-sm mb-4 line-clamp-2">
                         {post.excerpt}
                       </p>
                       <div className="flex items-center justify-between text-coffee/50">
-                        <div className="flex items-center text-sm font-asap">
+                        <div className="flex items-center text-sm font-poppins">
                           <Calendar className="w-4 h-4 mr-2" strokeWidth={1.5} />
                           {formatDate(post.created_at)}
                         </div>
-                        <div className="flex items-center text-sm font-asap">
+                        <div className="flex items-center text-sm font-poppins">
                           <User className="w-4 h-4 mr-2" strokeWidth={1.5} />
                           {post.author}
                         </div>
@@ -116,17 +116,17 @@ const BlogPage = () => {
       {/* Newsletter CTA */}
       <section className="py-24 lg:py-32 bg-coffee">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl sm:text-4xl text-white mb-6">
+          <h2 className="font-cormorant text-3xl sm:text-4xl text-white mb-6">
             Vous avez une question ?
           </h2>
-          <p className="font-asap text-lg text-cream/80 max-w-2xl mx-auto mb-10">
+          <p className="font-poppins text-lg text-cream/80 max-w-2xl mx-auto mb-10">
             N'hésitez pas à me contacter pour discuter de votre projet ou pour
             toute question sur l'organisation de votre mariage.
           </p>
           <Link to="/contact">
             <Button
               data-testid="cta-contact-blog"
-              className="bg-peach hover:bg-peach-light text-coffee font-asap text-sm uppercase tracking-wider px-10 py-6"
+              className="bg-peach hover:bg-peach-light text-coffee font-poppins text-sm uppercase tracking-wider px-10 py-6"
             >
               Me contacter
               <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />

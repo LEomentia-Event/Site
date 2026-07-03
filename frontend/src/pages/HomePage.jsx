@@ -38,7 +38,7 @@ const HomePage = () => {
       {/* Hero Section */}
       <section
         data-testid="hero-section"
-        className="relative min-h-screen flex items-center justify-center"
+        className="relative min-h-screen flex items-center justify-center grain"
       >
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -50,15 +50,15 @@ const HomePage = () => {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
-          <span className="inline-block font-asap text-peach text-sm uppercase tracking-[0.3em] mb-6 opacity-0 animate-fade-in animate-delay-100">
+          <span className="inline-block font-poppins text-peach text-xs sm:text-sm uppercase tracking-[0.4em] mb-8 opacity-0 animate-fade-in animate-delay-100">
             Wedding Planner & Designer
           </span>
-          <h1 className="font-poiret text-4xl sm:text-5xl lg:text-7xl text-white leading-tight mb-8 opacity-0 animate-fade-in-up animate-delay-200">
+          <h1 className="font-cormorant font-light text-5xl sm:text-6xl lg:text-8xl text-white leading-[1.05] mb-8 opacity-0 animate-fade-in-up animate-delay-200">
             Organisez votre mariage
             <br />
-            <span className="text-peach">sans stress</span>
+            <span className="italic text-peach">sans stress</span>
           </h1>
-          <p className="font-asap text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0 animate-fade-in-up animate-delay-300">
+          <p className="font-poppins text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0 animate-fade-in-up animate-delay-300">
             Je suis Virginie, Wedding Planner & Designer chez Léomentia Event.
             J'accompagne les futurs mariés qui souhaitent se libérer de la
             charge mentale et vivre un mariage fluide, élégant et parfaitement
@@ -68,7 +68,7 @@ const HomePage = () => {
             <Link to="/services">
               <Button
                 data-testid="cta-services"
-                className="bg-peach hover:bg-peach-light text-coffee font-asap text-sm uppercase tracking-wider px-8 py-6 btn-shine"
+                className="bg-peach hover:bg-peach-light text-coffee font-poppins text-sm uppercase tracking-wider px-8 py-6 btn-shine"
               >
                 Découvrir mes services
               </Button>
@@ -81,7 +81,7 @@ const HomePage = () => {
               <Button
                 data-testid="cta-calendly-hero"
                 variant="outline"
-                className="border-white text-white hover:bg-white/10 font-asap text-sm uppercase tracking-wider px-8 py-6"
+                className="border-white text-white hover:bg-white/10 font-poppins text-sm uppercase tracking-wider px-8 py-6"
               >
                 Réserver un appel découverte
               </Button>
@@ -101,7 +101,7 @@ const HomePage = () => {
       <section data-testid="problems-section" className="py-24 lg:py-32 bg-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
+            <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
               L'organisation d'un mariage peut vite devenir un casse-tête
             </h2>
             <div className="section-divider mt-6"></div>
@@ -141,7 +141,7 @@ const HomePage = () => {
                       strokeWidth={1.5}
                     />
                   </div>
-                  <p className="font-asap text-coffee/80 leading-relaxed">
+                  <p className="font-poppins text-coffee/80 leading-relaxed">
                     {item.text}
                   </p>
                 </CardContent>
@@ -149,7 +149,7 @@ const HomePage = () => {
             ))}
           </div>
 
-          <p className="text-center font-asap text-xl text-gold mt-12">
+          <p className="text-center font-poppins text-xl text-gold mt-12">
             C'est exactement pour cela que j'existe.
           </p>
         </div>
@@ -175,13 +175,13 @@ const HomePage = () => {
             </div>
 
             <div>
-              <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+              <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
                 À propos
               </span>
-              <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-coffee mb-8">
+              <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee mb-8">
                 Une wedding planner à vos côtés pour sécuriser chaque détail
               </h2>
-              <div className="space-y-6 font-asap text-coffee/80 leading-relaxed">
+              <div className="space-y-6 font-poppins text-coffee/80 leading-relaxed">
                 <p>
                   Je suis <strong className="text-coffee">Virginie</strong>,
                   fondatrice de Léomentia Event.
@@ -209,7 +209,7 @@ const HomePage = () => {
               <Link to="/contact" className="inline-block mt-8">
                 <Button
                   data-testid="cta-contact-about"
-                  className="bg-gold hover:bg-gold-dark text-white font-asap text-sm uppercase tracking-wider px-8 py-3"
+                  className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-8 py-3"
                 >
                   Me contacter
                   <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
@@ -224,10 +224,10 @@ const HomePage = () => {
       <section data-testid="values-section" className="py-24 lg:py-32 bg-coffee">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="font-asap text-peach text-sm uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-poppins text-peach text-sm uppercase tracking-[0.2em] mb-4 block">
               Mes valeurs
             </span>
-            <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
+            <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
               Ce qui guide chaque projet
             </h2>
           </div>
@@ -263,10 +263,10 @@ const HomePage = () => {
                     strokeWidth={1.5}
                   />
                 </div>
-                <h3 className="font-poiret text-2xl text-peach mb-4">
+                <h3 className="font-cormorant text-2xl text-peach mb-4">
                   {value.title}
                 </h3>
-                <p className="font-asap text-cream/80">{value.description}</p>
+                <p className="font-poppins text-cream/80">{value.description}</p>
               </div>
             ))}
           </div>
@@ -280,13 +280,16 @@ const HomePage = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
               Services
             </span>
-            <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
+            <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
               Mes accompagnements
             </h2>
             <div className="section-divider mt-6"></div>
+            <p data-testid="services-price-mention-home" className="font-poppins text-gold text-lg tracking-wide mt-6">
+              À partir de 1 200€
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -361,22 +364,19 @@ const HomePage = () => {
                   />
                 </div>
                 <CardContent className="p-8">
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="font-poiret text-2xl text-coffee">
+                  <div className="mb-4">
+                    <h3 className="font-cormorant text-2xl text-coffee">
                       {service.title}
                     </h3>
-                    <span className="font-asap text-xl text-gold font-medium">
-                      {service.price}
-                    </span>
                   </div>
-                  <p className="font-asap text-coffee/70 mb-6">
+                  <p className="font-poppins text-coffee/70 mb-6">
                     {service.description}
                   </p>
                   <ul className="space-y-3">
                     {service.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start font-asap text-coffee/80"
+                        className="flex items-start font-poppins text-coffee/80"
                       >
                         <CheckCircle
                           className="w-5 h-5 text-gold mr-3 flex-shrink-0 mt-0.5"
@@ -396,7 +396,7 @@ const HomePage = () => {
               <Button
                 data-testid="cta-all-services"
                 variant="outline"
-                className="border-coffee text-coffee hover:bg-coffee hover:text-white font-asap text-sm uppercase tracking-wider px-8 py-3"
+                className="border-coffee text-coffee hover:bg-coffee hover:text-white font-poppins text-sm uppercase tracking-wider px-8 py-3"
               >
                 Voir tous les services
                 <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
@@ -413,10 +413,10 @@ const HomePage = () => {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
               Processus
             </span>
-            <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
+            <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
               Comment je vous accompagne
             </h2>
             <div className="section-divider mt-6"></div>
@@ -450,14 +450,14 @@ const HomePage = () => {
             ].map((step, index) => (
               <div key={index} className="text-center relative">
                 <div className="w-16 h-16 rounded-full bg-peach flex items-center justify-center mx-auto mb-6">
-                  <span className="font-poiret text-2xl text-coffee">
+                  <span className="font-cormorant text-2xl text-coffee">
                     {step.step}
                   </span>
                 </div>
-                <h3 className="font-poiret text-xl text-coffee mb-3">
+                <h3 className="font-cormorant text-xl text-coffee mb-3">
                   {step.title}
                 </h3>
-                <p className="font-asap text-coffee/70">{step.description}</p>
+                <p className="font-poppins text-coffee/70">{step.description}</p>
                 {index < 3 && (
                   <div className="hidden lg:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-gold/50 to-transparent"></div>
                 )}
@@ -475,10 +475,10 @@ const HomePage = () => {
         >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+              <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
                 Témoignages
               </span>
-              <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
+              <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee mb-4">
                 Ce que disent les mariés
               </h2>
               <div className="section-divider mt-6"></div>
@@ -500,7 +500,7 @@ const HomePage = () => {
                         />
                       ))}
                     </div>
-                    <p className="font-asap text-coffee/80 leading-relaxed mb-6">
+                    <p className="font-poppins text-coffee/80 leading-relaxed mb-6">
                       "{testimonial.content}"
                     </p>
                     <div className="flex items-center">
@@ -512,10 +512,10 @@ const HomePage = () => {
                         />
                       </div>
                       <div>
-                        <p className="font-poiret text-lg text-coffee">
+                        <p className="font-cormorant text-lg text-coffee">
                           {testimonial.couple_names}
                         </p>
-                        <p className="font-asap text-sm text-gold">
+                        <p className="font-poppins text-sm text-gold">
                           {testimonial.wedding_date}
                         </p>
                       </div>
@@ -530,7 +530,7 @@ const HomePage = () => {
                 <Button
                   data-testid="cta-all-testimonials"
                   variant="outline"
-                  className="border-coffee text-coffee hover:bg-coffee hover:text-white font-asap text-sm uppercase tracking-wider px-8 py-3"
+                  className="border-coffee text-coffee hover:bg-coffee hover:text-white font-poppins text-sm uppercase tracking-wider px-8 py-3"
                 >
                   Voir tous les témoignages
                   <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
@@ -544,7 +544,7 @@ const HomePage = () => {
       {/* CTA Section */}
       <section
         data-testid="cta-section"
-        className="py-24 lg:py-32 bg-coffee relative overflow-hidden"
+        className="py-24 lg:py-32 bg-coffee relative overflow-hidden grain"
       >
         <div className="absolute inset-0 opacity-10">
           <div
@@ -555,10 +555,10 @@ const HomePage = () => {
           ></div>
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
+          <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
             Et si on parlait de votre mariage ?
           </h2>
-          <p className="font-asap text-lg text-cream/80 max-w-2xl mx-auto mb-10">
+          <p className="font-poppins text-lg text-cream/80 max-w-2xl mx-auto mb-10">
             Je vous propose un appel découverte gratuit pour faire le point sur
             votre organisation et voir comment je peux vous accompagner.
           </p>
@@ -569,7 +569,7 @@ const HomePage = () => {
           >
             <Button
               data-testid="cta-calendly-final"
-              className="bg-peach hover:bg-peach-light text-coffee font-asap text-sm uppercase tracking-wider px-10 py-6 btn-shine"
+              className="bg-peach hover:bg-peach-light text-coffee font-poppins text-sm uppercase tracking-wider px-10 py-6 btn-shine"
             >
               Réserver mon appel découverte
             </Button>

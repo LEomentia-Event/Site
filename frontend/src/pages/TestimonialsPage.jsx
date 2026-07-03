@@ -29,13 +29,13 @@ const TestimonialsPage = () => {
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+          <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
             Témoignages
           </span>
-          <h1 className="font-poiret text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
+          <h1 className="font-cormorant text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
             Ce que disent les mariés
           </h1>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto">
             Découvrez les retours de couples que j'ai eu le bonheur d'accompagner
             dans l'organisation de leur mariage.
           </p>
@@ -47,11 +47,11 @@ const TestimonialsPage = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">Chargement...</p>
+              <p className="font-poppins text-coffee/60">Chargement...</p>
             </div>
           ) : testimonials.length === 0 ? (
             <div className="text-center py-20">
-              <p className="font-asap text-coffee/60">
+              <p className="font-poppins text-coffee/60">
                 Aucun témoignage pour le moment
               </p>
             </div>
@@ -88,14 +88,14 @@ const TestimonialsPage = () => {
                             />
                           ))}
                         </div>
-                        <p className="font-asap text-coffee/80 leading-relaxed mb-6 relative z-10">
+                        <p className="font-poppins text-coffee/80 leading-relaxed mb-6 relative z-10">
                           "{testimonial.content}"
                         </p>
                         <div>
-                          <p className="font-poiret text-xl text-coffee">
+                          <p className="font-cormorant text-xl text-coffee">
                             {testimonial.couple_names}
                           </p>
-                          <p className="font-asap text-sm text-gold">
+                          <p className="font-poppins text-sm text-gold">
                             Mariage {testimonial.wedding_date}
                           </p>
                         </div>
@@ -120,10 +120,10 @@ const TestimonialsPage = () => {
               { number: '5/5', label: 'Note moyenne' },
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <p className="font-poiret text-4xl lg:text-5xl text-peach mb-2">
+                <p className="font-cormorant text-4xl lg:text-5xl text-peach mb-2">
                   {stat.number}
                 </p>
-                <p className="font-asap text-cream/70">{stat.label}</p>
+                <p className="font-poppins text-cream/70">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -133,10 +133,10 @@ const TestimonialsPage = () => {
       {/* CTA */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl sm:text-4xl text-coffee mb-6">
+          <h2 className="font-cormorant text-3xl sm:text-4xl text-coffee mb-6">
             Prêts à vivre votre plus belle journée ?
           </h2>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto mb-10">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto mb-10">
             Rejoignez les couples qui ont fait confiance à Léomentia Event pour
             leur mariage.
           </p>
@@ -147,7 +147,7 @@ const TestimonialsPage = () => {
           >
             <Button
               data-testid="cta-calendly-testimonials"
-              className="bg-gold hover:bg-gold-dark text-white font-asap text-sm uppercase tracking-wider px-10 py-6"
+              className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-10 py-6"
             >
               Réserver un appel découverte
             </Button>

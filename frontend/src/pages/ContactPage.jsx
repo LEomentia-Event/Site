@@ -56,13 +56,13 @@ const ContactPage = () => {
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="font-asap text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+          <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
             Contact
           </span>
-          <h1 className="font-poiret text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
+          <h1 className="font-cormorant text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
             Parlons de votre mariage
           </h1>
-          <p className="font-asap text-lg text-coffee/70 max-w-2xl mx-auto">
+          <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto">
             Vous avez un projet ? Une question ? N'hésitez pas à me contacter,
             je vous répondrai dans les plus brefs délais.
           </p>
@@ -75,7 +75,7 @@ const ContactPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Info */}
             <div>
-              <h2 className="font-poiret text-3xl text-coffee mb-8">
+              <h2 className="font-cormorant text-3xl text-coffee mb-8">
                 Mes coordonnées
               </h2>
 
@@ -88,10 +88,10 @@ const ContactPage = () => {
                     <Phone className="w-5 h-5 text-gold" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-asap font-medium text-coffee mb-1">
+                    <p className="font-poppins font-medium text-coffee mb-1">
                       Téléphone
                     </p>
-                    <p className="font-asap text-coffee/70">06 61 86 51 55</p>
+                    <p className="font-poppins text-coffee/70">06 61 86 51 55</p>
                   </div>
                 </a>
 
@@ -103,10 +103,10 @@ const ContactPage = () => {
                     <Mail className="w-5 h-5 text-gold" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-asap font-medium text-coffee mb-1">
+                    <p className="font-poppins font-medium text-coffee mb-1">
                       Email
                     </p>
-                    <p className="font-asap text-coffee/70">
+                    <p className="font-poppins text-coffee/70">
                       virginie.bocquelet.pro@gmail.com
                     </p>
                   </div>
@@ -117,10 +117,10 @@ const ContactPage = () => {
                     <MapPin className="w-5 h-5 text-gold" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-asap font-medium text-coffee mb-1">
+                    <p className="font-poppins font-medium text-coffee mb-1">
                       Zone d'intervention
                     </p>
-                    <p className="font-asap text-coffee/70">
+                    <p className="font-poppins text-coffee/70">
                       France entière
                     </p>
                   </div>
@@ -131,10 +131,10 @@ const ContactPage = () => {
                     <Clock className="w-5 h-5 text-gold" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-asap font-medium text-coffee mb-1">
+                    <p className="font-poppins font-medium text-coffee mb-1">
                       Disponibilité
                     </p>
-                    <p className="font-asap text-coffee/70">
+                    <p className="font-poppins text-coffee/70">
                       Du lundi au samedi, 9h - 19h
                     </p>
                   </div>
@@ -144,10 +144,10 @@ const ContactPage = () => {
               {/* Calendly CTA */}
               <Card className="bg-coffee border-none">
                 <CardContent className="p-8 text-center">
-                  <h3 className="font-poiret text-2xl text-peach mb-4">
+                  <h3 className="font-cormorant text-2xl text-peach mb-4">
                     Préférez un appel ?
                   </h3>
-                  <p className="font-asap text-cream/80 mb-6">
+                  <p className="font-poppins text-cream/80 mb-6">
                     Réservez directement un créneau pour un appel découverte
                     gratuit de 30 minutes.
                   </p>
@@ -158,7 +158,7 @@ const ContactPage = () => {
                   >
                     <Button
                       data-testid="cta-calendly-contact"
-                      className="bg-peach hover:bg-peach-light text-coffee font-asap text-sm uppercase tracking-wider px-8 py-3 w-full"
+                      className="bg-peach hover:bg-peach-light text-coffee font-poppins text-sm uppercase tracking-wider px-8 py-3 w-full"
                     >
                       Réserver un appel découverte
                     </Button>
@@ -169,7 +169,7 @@ const ContactPage = () => {
 
             {/* Contact Form */}
             <div>
-              <h2 className="font-poiret text-3xl text-coffee mb-8">
+              <h2 className="font-cormorant text-3xl text-coffee mb-8">
                 Envoyez-moi un message
               </h2>
 
@@ -182,10 +182,10 @@ const ContactPage = () => {
                         strokeWidth={1.5}
                       />
                     </div>
-                    <h3 className="font-poiret text-2xl text-coffee mb-4">
+                    <h3 className="font-cormorant text-2xl text-coffee mb-4">
                       Message envoyé !
                     </h3>
-                    <p className="font-asap text-coffee/70 mb-6">
+                    <p className="font-poppins text-coffee/70 mb-6">
                       Merci pour votre message. Je vous répondrai dans les plus
                       brefs délais.
                     </p>
@@ -204,7 +204,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="name"
-                        className="font-asap text-coffee"
+                        className="font-poppins text-coffee"
                       >
                         Nom complet *
                       </Label>
@@ -222,7 +222,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="email"
-                        className="font-asap text-coffee"
+                        className="font-poppins text-coffee"
                       >
                         Email *
                       </Label>
@@ -244,7 +244,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="wedding_date"
-                        className="font-asap text-coffee"
+                        className="font-poppins text-coffee"
                       >
                         Date du mariage
                       </Label>
@@ -261,7 +261,7 @@ const ContactPage = () => {
                     <div className="space-y-2">
                       <Label
                         htmlFor="wedding_location"
-                        className="font-asap text-coffee"
+                        className="font-poppins text-coffee"
                       >
                         Lieu du mariage
                       </Label>
@@ -280,7 +280,7 @@ const ContactPage = () => {
                   <div className="space-y-2">
                     <Label
                       htmlFor="guest_count"
-                      className="font-asap text-coffee"
+                      className="font-poppins text-coffee"
                     >
                       Nombre d'invités estimé
                     </Label>
@@ -298,7 +298,7 @@ const ContactPage = () => {
                   <div className="space-y-2">
                     <Label
                       htmlFor="message"
-                      className="font-asap text-coffee"
+                      className="font-poppins text-coffee"
                     >
                       Votre message *
                     </Label>
@@ -319,7 +319,7 @@ const ContactPage = () => {
                     type="submit"
                     data-testid="submit-contact-form"
                     disabled={isSubmitting}
-                    className="bg-gold hover:bg-gold-dark text-white font-asap text-sm uppercase tracking-wider px-8 py-3 w-full sm:w-auto"
+                    className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-8 py-3 w-full sm:w-auto"
                   >
                     {isSubmitting ? (
                       'Envoi en cours...'
@@ -340,7 +340,7 @@ const ContactPage = () => {
       {/* Map/Links Section */}
       <section className="py-16 lg:py-24 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl text-coffee mb-6">
+          <h2 className="font-cormorant text-3xl text-coffee mb-6">
             Retrouvez-moi aussi sur
           </h2>
           <div className="flex flex-wrap justify-center gap-4">
@@ -349,7 +349,7 @@ const ContactPage = () => {
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-taplink"
-              className="inline-flex items-center font-asap text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
+              className="inline-flex items-center font-poppins text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
             >
               Mon Taplink
             </a>
@@ -358,7 +358,7 @@ const ContactPage = () => {
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-instagram"
-              className="inline-flex items-center font-asap text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
+              className="inline-flex items-center font-poppins text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
             >
               Instagram
             </a>
@@ -367,7 +367,7 @@ const ContactPage = () => {
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-facebook"
-              className="inline-flex items-center font-asap text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
+              className="inline-flex items-center font-poppins text-coffee bg-white border border-coffee/20 px-6 py-3 rounded-lg hover:border-gold hover:text-gold transition-colors"
             >
               Facebook
             </a>

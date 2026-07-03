@@ -39,7 +39,7 @@ const BlogPostPage = () => {
   if (loading) {
     return (
       <div className="pt-20 min-h-screen bg-cream flex items-center justify-center">
-        <p className="font-asap text-coffee/60">Chargement...</p>
+        <p className="font-poppins text-coffee/60">Chargement...</p>
       </div>
     );
   }
@@ -47,7 +47,7 @@ const BlogPostPage = () => {
   if (error || !post) {
     return (
       <div className="pt-20 min-h-screen bg-cream flex flex-col items-center justify-center">
-        <p className="font-asap text-coffee/60 mb-8">{error || 'Article non trouvé'}</p>
+        <p className="font-poppins text-coffee/60 mb-8">{error || 'Article non trouvé'}</p>
         <Link to="/blog">
           <Button variant="outline" className="border-coffee text-coffee">
             <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={1.5} />
@@ -71,18 +71,18 @@ const BlogPostPage = () => {
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Link
             to="/blog"
-            className="inline-flex items-center font-asap text-peach hover:text-white transition-colors mb-8"
+            className="inline-flex items-center font-poppins text-peach hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={1.5} />
             Retour au blog
           </Link>
-          <span className="block font-asap text-peach text-sm uppercase tracking-wide mb-4">
+          <span className="block font-poppins text-peach text-sm uppercase tracking-wide mb-4">
             {post.category}
           </span>
-          <h1 className="font-poiret text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
+          <h1 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-white mb-6">
             {post.title}
           </h1>
-          <div className="flex items-center justify-center space-x-6 text-cream/70 font-asap text-sm">
+          <div className="flex items-center justify-center space-x-6 text-cream/70 font-poppins text-sm">
             <div className="flex items-center">
               <Calendar className="w-4 h-4 mr-2" strokeWidth={1.5} />
               {formatDate(post.created_at)}
@@ -99,8 +99,8 @@ const BlogPostPage = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className="prose prose-lg max-w-none font-asap text-coffee/80 
-                       prose-headings:font-poiret prose-headings:text-coffee 
+            className="prose prose-lg max-w-none font-poppins text-coffee/80 
+                       prose-headings:font-cormorant prose-headings:text-coffee 
                        prose-h2:text-2xl prose-h3:text-xl
                        prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                        prose-strong:text-coffee
@@ -123,10 +123,10 @@ const BlogPostPage = () => {
               />
             </div>
             <div>
-              <p className="font-poiret text-xl text-coffee mb-1">
+              <p className="font-cormorant text-xl text-coffee mb-1">
                 {post.author}
               </p>
-              <p className="font-asap text-coffee/70 text-sm">
+              <p className="font-poppins text-coffee/70 text-sm">
                 Wedding Planner & Designer chez Léomentia Event
               </p>
             </div>
@@ -137,10 +137,10 @@ const BlogPostPage = () => {
       {/* CTA */}
       <section className="py-24 lg:py-32 bg-coffee">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-poiret text-3xl sm:text-4xl text-white mb-6">
+          <h2 className="font-cormorant text-3xl sm:text-4xl text-white mb-6">
             Besoin d'aide pour votre mariage ?
           </h2>
-          <p className="font-asap text-lg text-cream/80 max-w-2xl mx-auto mb-10">
+          <p className="font-poppins text-lg text-cream/80 max-w-2xl mx-auto mb-10">
             Je vous accompagne pour transformer votre vision en une expérience
             inoubliable.
           </p>
@@ -151,7 +151,7 @@ const BlogPostPage = () => {
           >
             <Button
               data-testid="cta-calendly-blogpost"
-              className="bg-peach hover:bg-peach-light text-coffee font-asap text-sm uppercase tracking-wider px-10 py-6"
+              className="bg-peach hover:bg-peach-light text-coffee font-poppins text-sm uppercase tracking-wider px-10 py-6"
             >
               Réserver un appel découverte
               <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
