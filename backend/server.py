@@ -26,7 +26,7 @@ BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', '')
 BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Léomentia Event')
 RECIPIENT_EMAIL = 'virginie.bocquelet.pro@gmail.com'
 BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
-INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://taplink.cc/virginie.leomentia')
+INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/leomentia.event/')
 
 # Create the main app
 app = FastAPI()
