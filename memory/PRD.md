@@ -20,8 +20,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - `/` Accueil, `/services` Services, `/galerie` Galerie, `/temoignages` Témoignages, `/blog` Blog, `/blog/:slug` Article, `/contact` Contact.
 
 ## Intégrations
-- Calendly (lien externe) : `https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia`.
-- Resend (email formulaire contact) via SDK `resend` — **RESEND_API_KEY non configurée** ⇒ le formulaire enregistre en base et renvoie 200 mais N'ENVOIE PAS d'email tant que la clé n'est pas fournie.
+- Calendly (lien externe + embed iframe sur /contact) : `https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia`.
+- **Brevo** (email transactionnel, ex-Sendinblue) via API REST `POST https://api.brevo.com/v3/smtp/email` (httpx async). Le formulaire de contact envoie un email à `virginie.bocquelet.pro@gmail.com` (reply-to = email du client). Config dans `backend/.env` : `BREVO_API_KEY`, `BREVO_SENDER_EMAIL` (expéditeur vérifié: virginie.bocquelet.pro@gmail.com), `BREVO_SENDER_NAME`. ✅ Testé e2e : Brevo renvoie 201, email envoyé. (Resend supprimé.)
 
 ## API
 - `POST /api/contact`, `GET /api/contacts`
@@ -37,8 +37,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - ✅ Embed Calendly inline (iframe) sur la page Contact (`calendly-embed-section` / `calendly-iframe`) en plus des boutons — charge calendly.com correctement, formulaire de contact toujours fonctionnel. Vérifié testing_agent (iteration_4, frontend 100%).
 
 ## Backlog / Prochaines actions
-- P0 : Fournir une clé Resend pour l'envoi réel des emails du formulaire de contact (sinon, envisager auto-seed au démarrage ou brancher un autre service).
-- P1 : Auto-seed des données (galerie/témoignages/blog) au démarrage ou via script de déploiement — la base est vide sur un déploiement neuf (seed manuel via POST /api/seed).
+- ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo — testé e2e.
+- 🟠 Auto-seed des données (galerie/témoignages/blog) au démarrage ou via script de déploiement — la base est vide sur un déploiement neuf (seed manuel via POST /api/seed).
 - P1 : a11y — ajouter un `DialogTitle` (visually-hidden) dans la lightbox de la galerie (warning Radix).
 - P2 : Intégrer les vraies photos de mariage fournies par la cliente dans la galerie/seed.
 - P2 : Nettoyer les champs `price` inutilisés dans les tableaux de données de ServicesPage/HomePage.
