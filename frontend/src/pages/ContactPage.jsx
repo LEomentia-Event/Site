@@ -337,6 +337,34 @@ const ContactPage = () => {
         </div>
       </section>
 
+      {/* Calendly Embed Section */}
+      <section data-testid="calendly-embed-section" className="py-16 lg:py-24 bg-coffee grain relative">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="font-poppins text-peach text-sm uppercase tracking-[0.2em] mb-4 block">
+              Prise de rendez-vous
+            </span>
+            <h2 className="font-cormorant text-3xl sm:text-4xl text-white mb-4">
+              Réservez votre appel découverte
+            </h2>
+            <p className="font-poppins text-cream/80 max-w-2xl mx-auto">
+              Choisissez directement le créneau qui vous convient pour un
+              échange gratuit de 30 minutes, sans engagement.
+            </p>
+          </div>
+          <div className="rounded-lg overflow-hidden bg-cream shadow-xl">
+            <iframe
+              data-testid="calendly-iframe"
+              src="https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia?hide_gdpr_banner=1&background_color=fffcf8&primary_color=99824d&text_color=3d211a"
+              title="Réserver un appel découverte avec Virginie - Léomentia Event"
+              className="w-full"
+              style={{ height: '720px', border: 'none' }}
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Map/Links Section */}
       <section className="py-16 lg:py-24 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

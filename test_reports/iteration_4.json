@@ -1,0 +1,26 @@
+{
+  "summary": "Verified Calendly inline embed on /contact plus regression on contact form. All checks passed.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Calendly embed section (data-testid=calendly-embed-section) present with heading 'Réservez votre appel découverte'. Iframe (data-testid=calendly-iframe) visible at 832x720, src correct, content_frame loads calendly.com successfully (navigates to ?month=2026-07). CTA button cta-calendly-contact present. Contact form POST /api/contact returned 200 and 'Message envoyé avec succès !' toast displayed. No console errors. Cookie banner from Calendly appears inside iframe (expected external behavior, not an app issue).",
+  "verification_details": {
+    "iframe_src": "https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia?hide_gdpr_banner=1&background_color=fffcf8&primary_color=99824d&text_color=3d211a",
+    "iframe_bounding_box": {"width": 832, "height": 720},
+    "iframe_content_frame_url": "https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia?...&month=2026-07",
+    "contact_form_status": 200,
+    "success_toast": "Message envoyé avec succès !",
+    "console_errors": []
+  }
+}
