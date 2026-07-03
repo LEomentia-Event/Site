@@ -10,7 +10,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 import asyncio
-import resend
+import httpx
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -20,10 +20,12 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Resend configuration
-resend.api_key = os.environ.get('RESEND_API_KEY', '')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+# Brevo (transactional email) configuration
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
+BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', '')
+BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Léomentia Event')
 RECIPIENT_EMAIL = 'virginie.bocquelet.pro@gmail.com'
+BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 
 # Create the main app
 app = FastAPI()
@@ -135,8 +137,8 @@ async def submit_contact_form(form_data: ContactFormCreate):
     
     await db.contacts.insert_one(doc)
     
-    # Send email notification
-    if resend.api_key:
+    # Send email notification via Brevo
+    if BREVO_API_KEY and BREVO_SENDER_EMAIL:
         try:
             html_content = f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -160,17 +162,34 @@ async def submit_contact_form(form_data: ContactFormCreate):
             </div>
             """
             
-            params = {
-                "from": SENDER_EMAIL,
-                "to": [RECIPIENT_EMAIL],
+            payload = {
+                "sender": {"email": BREVO_SENDER_EMAIL, "name": BREVO_SENDER_NAME},
+                "to": [{"email": RECIPIENT_EMAIL, "name": "Virginie Bocquelet"}],
+                "replyTo": {"email": contact.email, "name": contact.name},
                 "subject": f"Nouvelle demande de {contact.name} - Léomentia Event",
-                "html": html_content
+                "htmlContent": html_content,
             }
-            
-            await asyncio.to_thread(resend.Emails.send, params)
-            logger.info(f"Email sent for contact: {contact.email}")
+
+            async with httpx.AsyncClient(timeout=15) as http_client:
+                resp = await http_client.post(
+                    BREVO_API_URL,
+                    headers={
+                        "api-key": BREVO_API_KEY,
+                        "content-type": "application/json",
+                        "accept": "application/json",
+                    },
+                    json=payload,
+                )
+            if resp.status_code in (200, 201):
+                logger.info(f"Brevo email sent for contact: {contact.email}")
+            else:
+                logger.error(f"Brevo email failed ({resp.status_code}): {resp.text}")
         except Exception as e:
-            logger.error(f"Failed to send email: {str(e)}")
+            logger.error(f"Failed to send Brevo email: {str(e)}")
+    else:
+        logger.warning(
+            "BREVO_API_KEY/BREVO_SENDER_EMAIL not configured; contact saved without email"
+        )
     
     return contact
 
