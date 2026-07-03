@@ -34,6 +34,7 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - ✅ Correctif bug : logo invisible avant scroll sur l'accueil → logo SVG de marque (variante blanche/or sur hero sombre, café/or sur fond clair). Vérifié testing_agent (iteration_1, 5/5).
 - ✅ Refonte design éditoriale : swap typographique global (Cormorant Garamond + Poppins), hero agrandi avec accent italique « sans stress », texture grain sur sections sombres, utilitaires CSS raffinés (grain, gold-underline, reveal, nav-glass), smooth scroll. Vérifié testing_agent (iteration_2, aucune régression).
 - ✅ Section « Mes accompagnements » : suppression de tous les prix des formules (accueil + Services + options + puces sur-mesure) et mention unique « À partir de 1 200€ ». Vérifié testing_agent (iteration_3, frontend 100%).
+- ✅ Embed Calendly inline (iframe) sur la page Contact (`calendly-embed-section` / `calendly-iframe`) en plus des boutons — charge calendly.com correctement, formulaire de contact toujours fonctionnel. Vérifié testing_agent (iteration_4, frontend 100%).
 
 ## Backlog / Prochaines actions
 - P0 : Fournir une clé Resend pour l'envoi réel des emails du formulaire de contact (sinon, envisager auto-seed au démarrage ou brancher un autre service).
