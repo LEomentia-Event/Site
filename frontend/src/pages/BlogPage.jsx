@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,11 @@ const BlogPage = () => {
 
   return (
     <div data-testid="blog-page" className="pt-20">
+      <Seo
+        title="Blog mariage — Conseils & Inspirations | Léomentia Event"
+        description="Conseils d'organisation, budget et inspirations pour préparer votre mariage sereinement, par une wedding planner & designer professionnelle."
+        path="/blog"
+      />
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

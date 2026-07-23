@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,6 +27,11 @@ const TestimonialsPage = () => {
 
   return (
     <div data-testid="testimonials-page" className="pt-20">
+      <Seo
+        title="Témoignages clients — Léomentia Event"
+        description="Les retours des couples accompagnés par Virginie Bocquelet dans l'organisation de leur mariage. Découvrez leurs expériences avec Léomentia Event."
+        path="/temoignages"
+      />
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

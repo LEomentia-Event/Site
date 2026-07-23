@@ -37,7 +37,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - ✅ Embed Calendly inline (iframe) sur la page Contact (`calendly-embed-section` / `calendly-iframe`) en plus des boutons — charge calendly.com correctement, formulaire de contact toujours fonctionnel. Vérifié testing_agent (iteration_4, frontend 100%).
 
 ## Backlog / Prochaines actions
-- ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo — testé e2e.
+- ✅ (Fait) SEO : sitemap.xml + robots.txt (public/), index.html optimisé (lang fr, title, description, keywords, Open Graph, Twitter, canonical, JSON-LD ProfessionalService), et meta par page via react-helmet-async (composant `src/components/Seo.jsx`, HelmetProvider dans App.js).
+- ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo (notification + confirmation client) — testé e2e.
 - ✅ (Fait) Email de confirmation automatique au client (objet « Léomentia Event ✨ Parlons de votre joli projet », prénom auto, lien Instagram) en plus de la notification à Virginie.
 - 🟢 Confirmer/ajuster le lien Instagram de l'email client : actuellement `INSTAGRAM_URL` (env, défaut = taplink https://taplink.cc/virginie.leomentia).
 - 🟠 Auto-seed des données (galerie/témoignages/blog) au démarrage ou via script de déploiement — la base est vide sur un déploiement neuf (seed manuel via POST /api/seed).

@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,11 @@ const HomePage = () => {
 
   return (
     <div data-testid="home-page" className="overflow-hidden">
+      <Seo
+        title="Léomentia Event — Wedding Planner & Designer | Organisez votre mariage sans stress"
+        description="Virginie Bocquelet, wedding planner & designer. Organisation complète, partielle et coordination jour J pour un mariage élégant, fluide et sans stress. Réservez votre appel découverte gratuit."
+        path="/"
+      />
       {/* Hero Section */}
       <section
         data-testid="hero-section"

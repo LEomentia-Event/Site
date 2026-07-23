@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -53,6 +54,11 @@ const ContactPage = () => {
 
   return (
     <div data-testid="contact-page" className="pt-20">
+      <Seo
+        title="Contact — Léomentia Event | Réservez votre appel découverte"
+        description="Parlons de votre mariage. Contactez Virginie Bocquelet, wedding planner & designer, ou réservez directement un appel découverte gratuit de 30 minutes."
+        path="/contact"
+      />
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

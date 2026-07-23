@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -60,6 +61,12 @@ const BlogPostPage = () => {
 
   return (
     <div data-testid="blog-post-page" className="pt-20">
+      <Seo
+        title={`${post.title} — Léomentia Event`}
+        description={post.excerpt}
+        path={`/blog/${post.slug}`}
+        image={post.image_url}
+      />
       {/* Hero */}
       <section className="relative py-24 lg:py-32">
         <div

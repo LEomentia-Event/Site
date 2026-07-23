@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -104,6 +105,11 @@ const ServicesPage = () => {
 
   return (
     <div data-testid="services-page" className="pt-20">
+      <Seo
+        title="Services & Formules — Léomentia Event | Wedding Planner"
+        description="Organisation complète, organisation partielle & design, coordination jour J et accompagnement sur mesure. Des formules à partir de 1 200€ pour orchestrer votre mariage."
+        path="/services"
+      />
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

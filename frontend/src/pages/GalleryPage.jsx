@@ -1,3 +1,4 @@
+import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -59,6 +60,11 @@ const GalleryPage = () => {
 
   return (
     <div data-testid="gallery-page" className="pt-20">
+      <Seo
+        title="Galerie de mariages — Léomentia Event"
+        description="Découvrez une sélection de mariages et événements élégants orchestrés par Léomentia Event, wedding planner & designer en France."
+        path="/galerie"
+      />
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
