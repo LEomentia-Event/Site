@@ -1,7 +1,7 @@
 import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 
@@ -15,17 +15,57 @@ const GalleryPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGallery = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`${API}/gallery`);
-        setGallery(res.data);
+        const driveRes = await axios.get(`${API}/drive/albums`);
+        if (driveRes.data?.configured && driveRes.data.albums?.length) {
+          const items = [];
+          driveRes.data.albums.forEach((album) => {
+            album.images.forEach((img) => {
+              items.push({
+                id: img.id,
+                category: album.name,
+                thumb: img.thumb,
+                full: img.full,
+              });
+            });
+          });
+          setGallery(items);
+        } else {
+          const res = await axios.get(`${API}/gallery`);
+          setGallery(
+            res.data.map((it) => ({
+              id: it.id,
+              category: it.category,
+              title: it.title,
+              description: it.description,
+              thumb: it.image_url,
+              full: it.image_url,
+            }))
+          );
+        }
       } catch (e) {
         console.error('Error fetching gallery:', e);
+        try {
+          const res = await axios.get(`${API}/gallery`);
+          setGallery(
+            res.data.map((it) => ({
+              id: it.id,
+              category: it.category,
+              title: it.title,
+              description: it.description,
+              thumb: it.image_url,
+              full: it.image_url,
+            }))
+          );
+        } catch (err) {
+          console.error('Fallback gallery failed:', err);
+        }
       } finally {
         setLoading(false);
       }
     };
-    fetchGallery();
+    fetchData();
   }, []);
 
   const categories = ['Tous', ...new Set(gallery.map((item) => item.category))];
@@ -40,9 +80,7 @@ const GalleryPage = () => {
     setSelectedIndex(index);
   };
 
-  const closeLightbox = () => {
-    setSelectedImage(null);
-  };
+  const closeLightbox = () => setSelectedImage(null);
 
   const goToPrevious = () => {
     const newIndex =
@@ -82,29 +120,31 @@ const GalleryPage = () => {
       </section>
 
       {/* Category Filter */}
-      <section className="py-8 bg-white border-b border-coffee/10 sticky top-20 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                data-testid={`filter-${category.toLowerCase()}`}
-                onClick={() => setActiveCategory(category)}
-                variant={activeCategory === category ? 'default' : 'outline'}
-                className={`font-poppins text-sm ${
-                  activeCategory === category
-                    ? 'bg-gold hover:bg-gold-dark text-white'
-                    : 'border-coffee/20 text-coffee hover:bg-coffee/5'
-                }`}
-              >
-                {category}
-              </Button>
-            ))}
+      {categories.length > 1 && (
+        <section className="py-8 bg-white border-b border-coffee/10 sticky top-20 z-30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  data-testid={`filter-${category.toLowerCase().replace(/\s+/g, '-')}`}
+                  onClick={() => setActiveCategory(category)}
+                  variant={activeCategory === category ? 'default' : 'outline'}
+                  className={`font-poppins text-sm ${
+                    activeCategory === category
+                      ? 'bg-gold hover:bg-gold-dark text-white'
+                      : 'border-coffee/20 text-coffee hover:bg-coffee/5'
+                  }`}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Gallery Grid */}
+      {/* Gallery Grid (masonry) */}
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
@@ -114,36 +154,52 @@ const GalleryPage = () => {
           ) : filteredGallery.length === 0 ? (
             <div className="text-center py-20">
               <p className="font-poppins text-coffee/60">
-                Aucune image dans cette catégorie
+                Aucune photo pour le moment
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredGallery.map((item, index) => (
-                <div
-                  key={item.id}
-                  data-testid={`gallery-item-${item.id}`}
-                  className="gallery-item aspect-square rounded-lg overflow-hidden cursor-pointer group"
-                  onClick={() => openLightbox(item, index)}
+            <>
+              <div className="flex items-end justify-between mb-10">
+                <h2
+                  data-testid="gallery-album-title"
+                  className="font-cormorant text-3xl sm:text-4xl text-coffee"
                 >
-                  <img
-                    src={item.image_url}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-coffee/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <div>
-                      <h3 className="font-cormorant text-xl text-white mb-1">
-                        {item.title}
-                      </h3>
-                      <span className="font-poppins text-sm text-peach">
+                  {activeCategory === 'Tous' ? 'Toutes les photos' : activeCategory}
+                </h2>
+                <span
+                  data-testid="gallery-photo-count"
+                  className="font-poppins text-sm text-coffee/60 whitespace-nowrap"
+                >
+                  {filteredGallery.length}{' '}
+                  {filteredGallery.length > 1 ? 'photos' : 'photo'}
+                </span>
+              </div>
+
+              <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
+                {filteredGallery.map((item, index) => (
+                  <div
+                    key={item.id}
+                    data-testid={`gallery-item-${index}`}
+                    className="mb-6 break-inside-avoid relative rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => openLightbox(item, index)}
+                  >
+                    <img
+                      src={item.thumb}
+                      alt={item.title || item.category}
+                      loading="lazy"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-coffee/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                      <span className="font-poppins text-sm text-peach uppercase tracking-wider">
                         {item.category}
                       </span>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
@@ -151,9 +207,13 @@ const GalleryPage = () => {
       {/* Lightbox */}
       <Dialog open={!!selectedImage} onOpenChange={closeLightbox}>
         <DialogContent className="max-w-5xl bg-coffee/95 border-none p-0">
+          <DialogTitle className="sr-only">
+            Photo — {selectedImage?.category}
+          </DialogTitle>
           <div className="relative">
             <button
               onClick={closeLightbox}
+              data-testid="lightbox-close"
               className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
             >
               <X className="w-5 h-5 text-white" strokeWidth={1.5} />
@@ -163,12 +223,14 @@ const GalleryPage = () => {
               <>
                 <button
                   onClick={goToPrevious}
+                  data-testid="lightbox-prev"
                   className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
                   <ChevronLeft className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={goToNext}
+                  data-testid="lightbox-next"
                   className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
                   <ChevronRight className="w-6 h-6 text-white" strokeWidth={1.5} />
@@ -179,14 +241,16 @@ const GalleryPage = () => {
             {selectedImage && (
               <div className="p-4">
                 <img
-                  src={selectedImage.image_url}
-                  alt={selectedImage.title}
-                  className="w-full max-h-[80vh] object-contain rounded-lg"
+                  key={selectedImage.id}
+                  src={selectedImage.full}
+                  alt={selectedImage.title || selectedImage.category}
+                  referrerPolicy="no-referrer"
+                  className="w-full max-h-[80vh] object-contain rounded-lg animate-fade-in"
                 />
                 <div className="mt-4 text-center">
-                  <h3 className="font-cormorant text-2xl text-white">
-                    {selectedImage.title}
-                  </h3>
+                  <span className="font-poppins text-sm text-peach uppercase tracking-wider">
+                    {selectedImage.category}
+                  </span>
                   {selectedImage.description && (
                     <p className="font-poppins text-cream/70 mt-2">
                       {selectedImage.description}

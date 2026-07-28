@@ -11,6 +11,7 @@ import uuid
 from datetime import datetime, timezone
 import asyncio
 import httpx
+import time
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,6 +28,13 @@ BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Léomentia Event')
 RECIPIENT_EMAIL = 'virginie.bocquelet.pro@gmail.com'
 BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/leomentia.event/')
+
+# Google Drive gallery configuration
+GOOGLE_DRIVE_API_KEY = os.environ.get('GOOGLE_DRIVE_API_KEY', '')
+GOOGLE_DRIVE_ROOT_FOLDER_ID = os.environ.get('GOOGLE_DRIVE_ROOT_FOLDER_ID', '')
+DRIVE_FILES_URL = 'https://www.googleapis.com/drive/v3/files'
+DRIVE_CACHE_TTL = 300  # seconds — auto-refresh window for Drive changes
+_drive_cache = {"data": None, "ts": 0.0}
 
 # Create the main app
 app = FastAPI()
@@ -307,6 +315,90 @@ async def create_gallery_item(data: GalleryItemCreate):
     doc['created_at'] = doc['created_at'].isoformat()
     await db.gallery.insert_one(doc)
     return item
+
+# Google Drive gallery endpoints
+def _drive_image_urls(file_id: str):
+    return {
+        "thumb": f"https://drive.google.com/thumbnail?id={file_id}&sz=w800",
+        "full": f"https://drive.google.com/thumbnail?id={file_id}&sz=w2000",
+    }
+
+
+async def _drive_list(params: dict):
+    async with httpx.AsyncClient(timeout=20) as c:
+        r = await c.get(DRIVE_FILES_URL, params=params)
+    if r.status_code != 200:
+        logger.error(f"Drive API error {r.status_code}: {r.text[:300]}")
+        raise HTTPException(status_code=502, detail="Google Drive API error")
+    return r.json()
+
+
+async def _drive_album_images(folder_id: str):
+    q = f"'{folder_id}' in parents and mimeType contains 'image/' and trashed=false"
+    images = []
+    page_token = None
+    while True:
+        params = {
+            "key": GOOGLE_DRIVE_API_KEY,
+            "q": q,
+            "fields": "nextPageToken, files(id,name)",
+            "pageSize": 100,
+            "orderBy": "name_natural",
+        }
+        if page_token:
+            params["pageToken"] = page_token
+        data = await _drive_list(params)
+        for f in data.get("files", []):
+            images.append({"id": f["id"], "name": f.get("name", ""), **_drive_image_urls(f["id"])})
+        page_token = data.get("nextPageToken")
+        if not page_token:
+            break
+    return images
+
+
+async def fetch_drive_albums():
+    common = {
+        "key": GOOGLE_DRIVE_API_KEY,
+        "fields": "files(id,name)",
+        "pageSize": 100,
+        "orderBy": "name_natural",
+    }
+    folder_q = (
+        f"'{GOOGLE_DRIVE_ROOT_FOLDER_ID}' in parents "
+        "and mimeType='application/vnd.google-apps.folder' and trashed=false"
+    )
+    folders = (await _drive_list({**common, "q": folder_q})).get("files", [])
+    albums = []
+    if folders:
+        for f in folders:
+            imgs = await _drive_album_images(f["id"])
+            if imgs:
+                albums.append({"id": f["id"], "name": f["name"], "count": len(imgs), "images": imgs})
+    else:
+        imgs = await _drive_album_images(GOOGLE_DRIVE_ROOT_FOLDER_ID)
+        if imgs:
+            albums.append({"id": GOOGLE_DRIVE_ROOT_FOLDER_ID, "name": "Galerie", "count": len(imgs), "images": imgs})
+    return albums
+
+
+@api_router.get("/drive/albums")
+async def get_drive_albums(refresh: int = 0):
+    """Return gallery albums built from public Google Drive sub-folders."""
+    if not (GOOGLE_DRIVE_API_KEY and GOOGLE_DRIVE_ROOT_FOLDER_ID):
+        return {"configured": False, "albums": []}
+    now = time.time()
+    if not refresh and _drive_cache["data"] is not None and (now - _drive_cache["ts"] < DRIVE_CACHE_TTL):
+        return {"configured": True, "cached": True, "albums": _drive_cache["data"]}
+    try:
+        albums = await fetch_drive_albums()
+        _drive_cache["data"] = albums
+        _drive_cache["ts"] = now
+        return {"configured": True, "cached": False, "albums": albums}
+    except HTTPException:
+        if _drive_cache["data"] is not None:
+            return {"configured": True, "cached": True, "albums": _drive_cache["data"]}
+        raise
+
 
 # Seed data endpoint (for initial setup)
 @api_router.post("/seed")
