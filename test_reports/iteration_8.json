@@ -1,0 +1,31 @@
+{
+  "summary": "Verified the object-position framing fix on the hero (iteration 8). Both the fallback poster <img> and the <video data-testid='hero-video'> now use 'object-cover object-[center_35%]' (NOT 75%). Video src correctly points to /api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u; muted=true, autoplay/loop/playsInline set. Hero title 'Organisez votre mariage / sans stress' and CTAs (cta-services, cta-calendly-hero) render over the dark gradient overlay. Fallback poster screenshot shows the couple's heads/faces centered — framing is correct. HOWEVER: at the time of testing the Google Drive Data API is returning HTTP 403 Forbidden for the file (quota/rate-limit on the API key), so backend /api/drive/stream/{id} responds 502 and the <video> ends up with error=4 & readyState=0 & opacity=0. The fallback poster covers it seamlessly. Same backend code returned 206 successfully earlier in the day (see backend logs 11:53–12:01) so this is a transient upstream Drive quota issue, not a regression from the framing change.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u", "issue": "Currently returns 502 because Google Drive Data API responds 403 Forbidden for alt=media using the API key (likely daily quota exhausted by prior iterations' repeated range requests). Was returning 206 earlier today. Transient — retry later or rotate/increase the Drive API key quota. Not caused by the framing change."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "No code change needed for the framing fix — object-[center_35%] is correctly applied on both the poster <img> and <video>.",
+    "Monitor the Google Drive API key quota; consider a service-account or OAuth-based media fetch (or caching the video locally) to avoid public API-key 403s under repeated Range requests.",
+    "Once Drive quota resets, re-open the homepage to confirm the <video> reaches readyState>=2 and fades in (opacity 1). Fallback poster is already correct so UX is not broken in the meantime."
+  ],
+  "critical_code_review_comments": [
+    "The Drive stream proxy relies on a public API key with alt=media which is fragile under Range-heavy traffic (403s once quota is reached). Consider caching the fetched bytes on the backend / disk, or using a service account for higher quotas.",
+    "The <video> currently has opacity-0 when readyState<2; if the stream fails permanently the poster remains — good defensive UX. Consider adding a small onError handler that logs to /api for observability."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "50% (framing-adjacent code OK; Drive stream endpoint currently 502 due to upstream 403 quota)", "frontend": "100% (framing, classes, testids, CTAs, title all verified)"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "The framing change from object-[center_75%] to object-[center_35%] is applied to both the fallback <img> and the <video data-testid='hero-video'> in /app/frontend/src/pages/HomePage.jsx (lines 57 and 61). Verified via Playwright: video class = 'absolute inset-0 w-full h-full object-cover object-[center_35%] transition-opacity duration-1000 opacity-0', img class = 'absolute inset-0 w-full h-full object-cover object-[center_35%]'. When testing the video playback, Google Drive Data API was returning 403 Forbidden (quota) so backend proxy returned 502 — this is upstream and transient; earlier in the day the same endpoint returned 206 successfully. If retesting, first hit /api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u with a Range header; if 206 comes back, the video will fade in in the browser.",
+  "rca of the issue": "N/A — the framing fix itself is correct and verified. The observed video playback failure during this test is due to Google Drive API 403 Forbidden (quota exhaustion on the public API key), not the CSS change."
+}

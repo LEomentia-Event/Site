@@ -54,11 +54,11 @@ const HomePage = () => {
             src={HERO_POSTER}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-[center_75%]"
+            className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
           />
           <video
             data-testid="hero-video"
-            className={`absolute inset-0 w-full h-full object-cover object-[center_75%] transition-opacity duration-1000 ${
+            className={`absolute inset-0 w-full h-full object-cover object-[center_35%] transition-opacity duration-1000 ${
               videoReady ? 'opacity-100' : 'opacity-0'
             }`}
             autoPlay
