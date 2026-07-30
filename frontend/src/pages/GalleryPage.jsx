@@ -2,7 +2,7 @@ import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -13,6 +13,8 @@ const GalleryPage = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState('Tous');
   const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   useEffect(() => {
     const mapMongo = (data) =>
@@ -58,6 +60,15 @@ const GalleryPage = () => {
       }
     };
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${API}/drive/videos`)
+      .then((res) => {
+        if (res.data?.configured) setVideos(res.data.videos || []);
+      })
+      .catch((e) => console.error('Error fetching videos:', e));
   }, []);
 
   const categories = ['Tous', ...new Set(gallery.map((item) => item.category))];
@@ -255,6 +266,77 @@ const GalleryPage = () => {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Videos */}
+      {videos.length > 0 && (
+        <section className="py-16 lg:py-24 bg-cream" data-testid="video-section">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
+                Vidéos
+              </span>
+              <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee">
+                L'émotion en mouvement
+              </h2>
+              <div className="section-divider mt-6"></div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videos.map((video, index) => (
+                <div
+                  key={video.id}
+                  data-testid={`video-item-${index}`}
+                  onClick={() => setSelectedVideo(video)}
+                  className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group bg-coffee"
+                >
+                  <img
+                    src={video.thumb}
+                    alt={video.name}
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-coffee/30 group-hover:bg-coffee/10 transition-colors duration-300 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Play className="w-6 h-6 text-coffee ml-1" fill="currentColor" strokeWidth={0} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Video Lightbox */}
+      <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
+        <DialogContent className="max-w-4xl bg-coffee/95 border-none p-0">
+          <DialogTitle className="sr-only">Vidéo — {selectedVideo?.name}</DialogTitle>
+          <DialogDescription className="sr-only">
+            Lecture d'une vidéo de la galerie Léomentia Event.
+          </DialogDescription>
+          <button
+            onClick={() => setSelectedVideo(null)}
+            data-testid="video-close"
+            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+          >
+            <X className="w-5 h-5 text-white" strokeWidth={1.5} />
+          </button>
+          {selectedVideo && (
+            <div className="aspect-video w-full">
+              <iframe
+                data-testid="video-iframe"
+                src={selectedVideo.embed}
+                title={selectedVideo.name}
+                className="w-full h-full rounded-lg"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                style={{ border: 'none' }}
+              />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

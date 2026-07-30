@@ -35,6 +35,7 @@ GOOGLE_DRIVE_ROOT_FOLDER_ID = os.environ.get('GOOGLE_DRIVE_ROOT_FOLDER_ID', '')
 DRIVE_FILES_URL = 'https://www.googleapis.com/drive/v3/files'
 DRIVE_CACHE_TTL = 300  # seconds — auto-refresh window for Drive changes
 _drive_cache = {"data": None, "ts": 0.0}
+_drive_video_cache = {"data": None, "ts": 0.0}
 
 # Create the main app
 app = FastAPI()
@@ -397,6 +398,68 @@ async def get_drive_albums(refresh: int = 0):
     except HTTPException:
         if _drive_cache["data"] is not None:
             return {"configured": True, "cached": True, "albums": _drive_cache["data"]}
+        raise
+
+
+async def _drive_folder_videos(folder_id: str):
+    q = f"'{folder_id}' in parents and mimeType contains 'video/' and trashed=false"
+    videos = []
+    page_token = None
+    while True:
+        params = {
+            "key": GOOGLE_DRIVE_API_KEY,
+            "q": q,
+            "fields": "nextPageToken, files(id,name)",
+            "pageSize": 100,
+            "orderBy": "name_natural",
+        }
+        if page_token:
+            params["pageToken"] = page_token
+        data = await _drive_list(params)
+        for f in data.get("files", []):
+            videos.append({
+                "id": f["id"],
+                "name": f.get("name", ""),
+                "embed": f"https://drive.google.com/file/d/{f['id']}/preview",
+                "thumb": f"https://drive.google.com/thumbnail?id={f['id']}&sz=w800",
+            })
+        page_token = data.get("nextPageToken")
+        if not page_token:
+            break
+    return videos
+
+
+async def fetch_drive_videos():
+    videos = await _drive_folder_videos(GOOGLE_DRIVE_ROOT_FOLDER_ID)
+    folder_q = (
+        f"'{GOOGLE_DRIVE_ROOT_FOLDER_ID}' in parents "
+        "and mimeType='application/vnd.google-apps.folder' and trashed=false"
+    )
+    folders = (await _drive_list({
+        "key": GOOGLE_DRIVE_API_KEY, "fields": "files(id,name)", "pageSize": 100,
+        "orderBy": "name_natural", "q": folder_q,
+    })).get("files", [])
+    for f in folders:
+        videos += await _drive_folder_videos(f["id"])
+    return videos
+
+
+@api_router.get("/drive/videos")
+async def get_drive_videos(refresh: int = 0):
+    """Return video files from the public Google Drive folder(s)."""
+    if not (GOOGLE_DRIVE_API_KEY and GOOGLE_DRIVE_ROOT_FOLDER_ID):
+        return {"configured": False, "videos": []}
+    now = time.time()
+    if not refresh and _drive_video_cache["data"] is not None and (now - _drive_video_cache["ts"] < DRIVE_CACHE_TTL):
+        return {"configured": True, "cached": True, "videos": _drive_video_cache["data"]}
+    try:
+        videos = await fetch_drive_videos()
+        _drive_video_cache["data"] = videos
+        _drive_video_cache["ts"] = now
+        return {"configured": True, "cached": False, "videos": videos}
+    except HTTPException:
+        if _drive_video_cache["data"] is not None:
+            return {"configured": True, "cached": True, "videos": _drive_video_cache["data"]}
         raise
 
 
