@@ -1,0 +1,48 @@
+{
+  "summary": "Tested hero video framing fix and Drive stream endpoint. Framing CSS is correct (object-[center_75%] on both <video> and fallback <img>). All hero markup, title, CTAs and homepage sections render. CRITICAL: the <video> element itself fails to load in a real browser (MEDIA_ERR_SRC_NOT_SUPPORTED, readyState=0, error=4). Root cause: /api/drive/stream/{id} returns 502 for the exact requests browsers issue (no Range OR open-ended `Range: bytes=0-`); it only works for bounded ranges (e.g. bytes=0-1023). Backend logs show Google Drive returning 403 for those forwarded requests. The visible 'lower framing' users see is actually the fallback poster image (video stays opacity-0 since onCanPlay never fires).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "/api/drive/stream/{file_id}", "issue": "Returns 502 for requests with no Range header and for open-ended `Range: bytes=0-` (which is what HTML5 <video> elements send). Google Drive alt=media responds 403 to those forwarded requests. Only bounded ranges (e.g. bytes=0-1023) succeed. Consequence: <video> gets MEDIA_ERR_SRC_NOT_SUPPORTED and never plays.", "priority": "CRITICAL"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "HomePage hero <video data-testid='hero-video'>", "issue": "Video never becomes playable in browser: readyState stays 0, networkState=3, MediaError.code=4 ('Failed to load because no supported source was found'). Events sequence: emptied → loadstart → progress → suspend → error. Opacity stays at 0 (opacity-100 only triggered on onCanPlay). User only ever sees the fallback poster image, not the actual video.", "selector": "[data-testid='hero-video']", "priority": "CRITICAL"}
+    ],
+    "integration_issues": [
+      {"flow": "Hero video streaming (frontend <video> ↔ /api/drive/stream)", "issue": "Browser video element issues open-ended range request which the backend proxy answers with 502 (Drive returned 403). Manual fetch from JS with bounded Range succeeds (206 video/mp4). The 'framing lower' UX only appears to work because the fallback <img> uses the same object-[center_75%] class.", "affected_selectors": ["[data-testid='hero-video']"]}
+    ],
+    "design_issues": []
+  },
+  "verified_correct": [
+    "<video data-testid='hero-video'> present with className containing 'object-cover' and 'object-[center_75%]'",
+    "video attributes: autoplay=true, muted=true, loop=true, playsInline=true",
+    "src = {REACT_APP_BACKEND_URL}/api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u",
+    "Fallback <img> (Drive thumbnail) present with absolute inset-0, object-cover, object-[center_75%]",
+    "Hero title 'Organisez votre mariage' and 'sans stress' rendered and legible over dark overlay",
+    "CTAs cta-services and cta-calendly-hero visible and clickable",
+    "Homepage sections all render: hero-section, problems-section, about-section, values-section, services-section, process-section, testimonials-preview, cta-section",
+    "No JS console errors on load",
+    "Curl with bounded Range (bytes=0-1023) returns 206 video/mp4 with content-range bytes 0-1023/16146885"
+  ],
+  "test_report_links": [],
+  "action_items": [
+    "Fix /api/drive/stream/{file_id} so <video> can actually load. Options: (a) if incoming Range is missing or open-ended (`bytes=0-`), forward a bounded Range to Drive (e.g. `bytes=0-1048575`) and still return status_code=206 with a proper Content-Range built from Drive's response; (b) or fetch entire file (or a first big chunk) and return 200 with Content-Length so the <video> can play it (currently 502 is caused by open-ended range → Drive 403); (c) verify Google API key quota and set proper Referer/User-Agent when calling Drive to avoid 403s. Confirm success by checking that <video> readyState reaches >=2 and 'canplay' fires in the browser.",
+    "Consider serving the poster from /api/drive/stream too (or a cached copy) instead of drive.google.com/thumbnail (external, not covered by our CORS/cache policy).",
+    "Also: 502 error responses currently have content-type text/html (from proxy); backend should return JSON error to match API contract."
+  ],
+  "critical_code_review_comments": [
+    "server.py stream_drive_file (line 467): forwards Range header verbatim to Google Drive alt=media; Drive rejects open-ended `bytes=0-` and returns 403, which becomes 502 to the browser. This is the exact request pattern <video> uses, so the endpoint is effectively unusable as a <video src>.",
+    "server.py stream_drive_file: no retry / fallback logic — a single 403 kills the entire user experience even though the fallback poster masks it visually.",
+    "No content-length / total-size passthrough validation; only content-range is forwarded. If Drive omits it, <video> cannot seek."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "33% (1 of 3 request patterns to /api/drive/stream works; bounded range OK, no-range and open-ended range return 502)", "frontend": "80% (markup, framing class, poster, title, CTAs, other sections all OK; actual <video> playback broken)"},
+  "test_credentials": "n/a",
+  "seed_data_creation": "none",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Previous iterations 1-6 marked the feature as passing but did NOT verify the <video> element actually plays. The visible 'framing lower' behaviour comes from the fallback poster image (same object-position class), so screenshots look correct even when the video fails. Always assert v.readyState>=2 and check network for a successful 206 response to an OPEN-ENDED range (`Range: bytes=0-`), because that is what HTMLMediaElement issues in Chromium. Reproduce with: curl -D - -o /dev/null -H 'Range: bytes=0-' {BACKEND_URL}/api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u — currently returns 502.",
+  "rca of the issue": "1) Browser <video> element requests media with `Range: bytes=0-` (open-ended). 2) Backend /api/drive/stream forwards that Range header verbatim to https://www.googleapis.com/drive/v3/files/{id}?alt=media. 3) Google Drive alt=media returns 403 Forbidden for that request (observed in backend logs at 12:01:48 and 12:01:55). 4) Backend maps non-2xx to HTTPException 502. 5) <video> receives 502 (content-type text/html), fires 'suspend' then 'error' with MediaError.code=4 (SRC_NOT_SUPPORTED), stays paused with readyState=0, opacity remains 0. 6) User sees only the fallback poster forever. Reproduction: open https://leomentia-preview.preview.emergentagent.com/ then run in devtools: document.querySelector('[data-testid=\"hero-video\"]').error.code // → 4. Or curl -sD- -o/dev/null -H 'Range: bytes=0-' {BACKEND_URL}/api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u → HTTP/2 502. Mitigation: in stream_drive_file, if range_header is missing or equals 'bytes=0-' (or ends with '-'), rewrite it to a bounded chunk (e.g. `bytes=0-1048575`) before forwarding to Drive, and construct the response's Content-Range from Drive's returned range."
+}

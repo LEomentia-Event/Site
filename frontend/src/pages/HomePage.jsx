@@ -21,6 +21,9 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const HomePage = () => {
   const [testimonials, setTestimonials] = useState([]);
+  const [videoReady, setVideoReady] = useState(false);
+  const HERO_VIDEO_ID = '1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u';
+  const HERO_POSTER = `https://drive.google.com/thumbnail?id=${HERO_VIDEO_ID}&sz=w1600`;
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -47,16 +50,25 @@ const HomePage = () => {
         className="relative min-h-screen flex items-center justify-center grain"
       >
         <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={HERO_POSTER}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-[center_75%]"
+          />
           <video
             data-testid="hero-video"
-            className="absolute inset-0 w-full h-full object-cover"
+            className={`absolute inset-0 w-full h-full object-cover object-[center_75%] transition-opacity duration-1000 ${
+              videoReady ? 'opacity-100' : 'opacity-0'
+            }`}
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
-            poster="https://drive.google.com/thumbnail?id=1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u&sz=w1600"
-            src={`${process.env.REACT_APP_BACKEND_URL}/api/drive/stream/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u`}
+            poster={HERO_POSTER}
+            onCanPlay={() => setVideoReady(true)}
+            src={`${API}/drive/stream/${HERO_VIDEO_ID}`}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-coffee/60 via-coffee/40 to-coffee/70"></div>
         </div>
