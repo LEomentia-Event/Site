@@ -296,6 +296,9 @@ const GalleryPage = () => {
                     loading="lazy"
                     decoding="async"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-coffee/30 group-hover:bg-coffee/10 transition-colors duration-300 flex items-center justify-center">
