@@ -37,6 +37,9 @@ DRIVE_FILES_URL = 'https://www.googleapis.com/drive/v3/files'
 DRIVE_CACHE_TTL = 300  # seconds — auto-refresh window for Drive changes
 _drive_cache = {"data": None, "ts": 0.0}
 _drive_video_cache = {"data": None, "ts": 0.0}
+MEDIA_CACHE_DIR = ROOT_DIR / "media_cache"
+MEDIA_CACHE_DIR.mkdir(exist_ok=True)
+_media_locks = {}
 
 # Create the main app
 app = FastAPI()
@@ -464,46 +467,93 @@ async def get_drive_videos(refresh: int = 0):
         raise
 
 
+async def _ensure_media_cached(file_id: str):
+    """Download the Drive file once to local disk; return the local path."""
+    path = MEDIA_CACHE_DIR / file_id
+    if path.exists() and path.stat().st_size > 0:
+        return path
+    lock = _media_locks.setdefault(file_id, asyncio.Lock())
+    async with lock:
+        if path.exists() and path.stat().st_size > 0:
+            return path
+        tmp = path.with_suffix(".part")
+        download_urls = [
+            f"https://drive.google.com/uc?export=download&id={file_id}",
+            f"https://drive.usercontent.google.com/download?id={file_id}&export=download",
+            f"{DRIVE_FILES_URL}/{file_id}?alt=media&key={GOOGLE_DRIVE_API_KEY}",
+        ]
+        last_status = None
+        for url in download_urls:
+            try:
+                async with httpx.AsyncClient(timeout=180, follow_redirects=True) as c:
+                    async with c.stream("GET", url) as resp:
+                        last_status = resp.status_code
+                        ctype = resp.headers.get("content-type", "")
+                        if resp.status_code != 200 or ctype.startswith("text/html"):
+                            continue
+                        with open(tmp, "wb") as f:
+                            async for chunk in resp.aiter_bytes(65536):
+                                f.write(chunk)
+                if tmp.exists() and tmp.stat().st_size > 0:
+                    tmp.rename(path)
+                    logger.info(f"Cached Drive media {file_id} ({path.stat().st_size} bytes)")
+                    return path
+            except Exception as e:
+                logger.error(f"Drive download attempt failed ({url[:60]}...): {e}")
+                continue
+        logger.error(f"Drive download error for {file_id} (last status {last_status})")
+        raise HTTPException(status_code=502, detail="Drive download error")
+
+
 @api_router.get("/drive/stream/{file_id}")
 async def stream_drive_file(file_id: str, request: Request):
-    """Proxy-stream a public Drive video (with HTTP Range support) for use as a background video."""
+    """Serve a Drive video from local cache (downloaded once) with HTTP Range support."""
     if not GOOGLE_DRIVE_API_KEY:
         raise HTTPException(status_code=404, detail="Drive not configured")
-    media_url = f"{DRIVE_FILES_URL}/{file_id}?alt=media&key={GOOGLE_DRIVE_API_KEY}"
-    fwd_headers = {}
+    path = await _ensure_media_cached(file_id)
+    file_size = path.stat().st_size
+
+    start, end = 0, file_size - 1
+    status_code = 200
     range_header = request.headers.get("range")
-    if range_header:
-        fwd_headers["Range"] = range_header
-
-    stream_client = httpx.AsyncClient(timeout=None)
-    drive_req = stream_client.build_request("GET", media_url, headers=fwd_headers)
-    resp = await stream_client.send(drive_req, stream=True)
-
-    if resp.status_code not in (200, 206):
-        await resp.aclose()
-        await stream_client.aclose()
-        raise HTTPException(status_code=502, detail="Drive stream error")
-
-    passthrough = {}
-    for h in ("content-type", "content-length", "content-range"):
-        if h in resp.headers:
-            passthrough[h] = resp.headers[h]
-    passthrough["accept-ranges"] = "bytes"
-    passthrough["cache-control"] = "public, max-age=86400"
-
-    async def iterator():
+    if range_header and range_header.startswith("bytes="):
         try:
-            async for chunk in resp.aiter_bytes(chunk_size=65536):
-                yield chunk
-        finally:
-            await resp.aclose()
-            await stream_client.aclose()
+            s, e = range_header.replace("bytes=", "").split("-")
+            start = int(s) if s else 0
+            end = int(e) if e else file_size - 1
+            end = min(end, file_size - 1)
+            start = max(0, min(start, end))
+            status_code = 206
+        except Exception:
+            start, end = 0, file_size - 1
+            status_code = 200
+
+    chunk_size = 512 * 1024
+
+    def iterator():
+        with open(path, "rb") as f:
+            f.seek(start)
+            remaining = end - start + 1
+            while remaining > 0:
+                data = f.read(min(chunk_size, remaining))
+                if not data:
+                    break
+                remaining -= len(data)
+                yield data
+
+    headers = {
+        "accept-ranges": "bytes",
+        "content-length": str(end - start + 1),
+        "cache-control": "public, max-age=86400",
+    }
+    if status_code == 206:
+        headers["content-range"] = f"bytes {start}-{end}/{file_size}"
 
     return StreamingResponse(
         iterator(),
-        status_code=resp.status_code,
-        headers=passthrough,
-        media_type=resp.headers.get("content-type", "video/mp4"),
+        status_code=status_code,
+        headers=headers,
+        media_type="video/mp4",
     )
 
 
