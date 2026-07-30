@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -461,6 +462,49 @@ async def get_drive_videos(refresh: int = 0):
         if _drive_video_cache["data"] is not None:
             return {"configured": True, "cached": True, "videos": _drive_video_cache["data"]}
         raise
+
+
+@api_router.get("/drive/stream/{file_id}")
+async def stream_drive_file(file_id: str, request: Request):
+    """Proxy-stream a public Drive video (with HTTP Range support) for use as a background video."""
+    if not GOOGLE_DRIVE_API_KEY:
+        raise HTTPException(status_code=404, detail="Drive not configured")
+    media_url = f"{DRIVE_FILES_URL}/{file_id}?alt=media&key={GOOGLE_DRIVE_API_KEY}"
+    fwd_headers = {}
+    range_header = request.headers.get("range")
+    if range_header:
+        fwd_headers["Range"] = range_header
+
+    stream_client = httpx.AsyncClient(timeout=None)
+    drive_req = stream_client.build_request("GET", media_url, headers=fwd_headers)
+    resp = await stream_client.send(drive_req, stream=True)
+
+    if resp.status_code not in (200, 206):
+        await resp.aclose()
+        await stream_client.aclose()
+        raise HTTPException(status_code=502, detail="Drive stream error")
+
+    passthrough = {}
+    for h in ("content-type", "content-length", "content-range"):
+        if h in resp.headers:
+            passthrough[h] = resp.headers[h]
+    passthrough["accept-ranges"] = "bytes"
+    passthrough["cache-control"] = "public, max-age=86400"
+
+    async def iterator():
+        try:
+            async for chunk in resp.aiter_bytes(chunk_size=65536):
+                yield chunk
+        finally:
+            await resp.aclose()
+            await stream_client.aclose()
+
+    return StreamingResponse(
+        iterator(),
+        status_code=resp.status_code,
+        headers=passthrough,
+        media_type=resp.headers.get("content-type", "video/mp4"),
+    )
 
 
 # Seed data endpoint (for initial setup)
