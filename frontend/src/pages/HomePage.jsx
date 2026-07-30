@@ -103,6 +103,36 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Featured Video */}
+      <section
+        data-testid="featured-video-section"
+        className="py-24 lg:py-32 bg-coffee grain relative overflow-hidden"
+      >
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="font-poppins text-peach text-sm uppercase tracking-[0.3em] mb-4 block">
+              En vidéo
+            </span>
+            <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-white">
+              Un aperçu de mon univers
+            </h2>
+            <div className="section-divider mt-6"></div>
+          </div>
+          <div className="rounded-lg overflow-hidden shadow-2xl aspect-video bg-black">
+            <iframe
+              data-testid="featured-video-iframe"
+              src="https://drive.google.com/file/d/1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u/preview"
+              title="Séance couple mariage - Léomentia Event"
+              className="w-full h-full"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              style={{ border: 'none' }}
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Problems Section */}
       <section data-testid="problems-section" className="py-24 lg:py-32 bg-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

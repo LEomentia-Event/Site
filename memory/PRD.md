@@ -32,6 +32,7 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - `POST /api/seed` (seed manuel témoignages/blog/galerie)
 
 ## Réalisé (juin 2026)
+- ✅ Mise en avant vidéo sur l'accueil : section « En vidéo / Un aperçu de mon univers » juste après le hero, lecteur Drive (iframe) de la vidéo `seance-couple-mariage` (id `1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u`) — `data-testid="featured-video-section"`. Pour changer la vidéo, remplacer l'ID dans HomePage.jsx.
 - ✅ Correctif bug : logo invisible avant scroll sur l'accueil → logo SVG de marque (variante blanche/or sur hero sombre, café/or sur fond clair). Vérifié testing_agent (iteration_1, 5/5).
 - ✅ Refonte design éditoriale : swap typographique global (Cormorant Garamond + Poppins), hero agrandi avec accent italique « sans stress », texture grain sur sections sombres, utilitaires CSS raffinés (grain, gold-underline, reveal, nav-glass), smooth scroll. Vérifié testing_agent (iteration_2, aucune régression).
 - ✅ Section « Mes accompagnements » : suppression de tous les prix des formules (accueil + Services + options + puces sur-mesure) et mention unique « À partir de 1 200€ ». Vérifié testing_agent (iteration_3, frontend 100%).
