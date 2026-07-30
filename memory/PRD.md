@@ -21,7 +21,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 
 ## Intégrations
 - Calendly (lien externe + embed iframe sur /contact) : `https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia`.
-- **Brevo** (email transactionnel, ex-Sendinblue) via API REST `POST https://api.brevo.com/v3/smtp/email` (httpx async). Le formulaire de contact envoie un email à `virginie.bocquelet.pro@gmail.com` (reply-to = email du client). Config dans `backend/.env` : `BREVO_API_KEY`, `BREVO_SENDER_EMAIL` (expéditeur vérifié: virginie.bocquelet.pro@gmail.com), `BREVO_SENDER_NAME`. ✅ Testé e2e : Brevo renvoie 201, email envoyé. (Resend supprimé.)
+- **Google Drive** (galerie photos) : backend `GET /api/drive/albums` appelle l'API Drive v3 (REST + clé API `GOOGLE_DRIVE_API_KEY`) sur le dossier public `GOOGLE_DRIVE_ROOT_FOLDER_ID`. Chaque sous-dossier = un album ; s'il n'y a pas de sous-dossier, toutes les images du dossier racine forment l'album « Galerie ». Vidéos exclues (images uniquement). Cache serveur 5 min (auto-refresh ; `?refresh=1` pour forcer). Repli auto sur la galerie Mongo si non configuré. Frontend : grille masonry + lazy loading + lightbox pleine résolution. ✅ Testé e2e (19 photos réelles). État actuel du Drive : pas de sous-dossiers → 1 album « Galerie ».
+- **Brevo** (email transactionnel) via API REST `POST https://api.brevo.com/v3/smtp/email` (httpx async). Le formulaire de contact envoie 2 emails : notification à Virginie + confirmation au client. Config `.env` : `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME`, `INSTAGRAM_URL`. ✅ Testé e2e.
 
 ## API
 - `POST /api/contact`, `GET /api/contacts`

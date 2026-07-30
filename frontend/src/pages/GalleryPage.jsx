@@ -1,7 +1,7 @@
 import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 
@@ -15,6 +15,16 @@ const GalleryPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const mapMongo = (data) =>
+      data.map((it) => ({
+        id: it.id,
+        category: it.category,
+        title: it.title,
+        description: it.description,
+        thumb: it.image_url,
+        full: it.image_url,
+      }));
+
     const fetchData = async () => {
       try {
         const driveRes = await axios.get(`${API}/drive/albums`);
@@ -33,31 +43,13 @@ const GalleryPage = () => {
           setGallery(items);
         } else {
           const res = await axios.get(`${API}/gallery`);
-          setGallery(
-            res.data.map((it) => ({
-              id: it.id,
-              category: it.category,
-              title: it.title,
-              description: it.description,
-              thumb: it.image_url,
-              full: it.image_url,
-            }))
-          );
+          setGallery(mapMongo(res.data));
         }
       } catch (e) {
         console.error('Error fetching gallery:', e);
         try {
           const res = await axios.get(`${API}/gallery`);
-          setGallery(
-            res.data.map((it) => ({
-              id: it.id,
-              category: it.category,
-              title: it.title,
-              description: it.description,
-              thumb: it.image_url,
-              full: it.image_url,
-            }))
-          );
+          setGallery(mapMongo(res.data));
         } catch (err) {
           console.error('Fallback gallery failed:', err);
         }
@@ -127,7 +119,7 @@ const GalleryPage = () => {
               {categories.map((category) => (
                 <Button
                   key={category}
-                  data-testid={`filter-${category.toLowerCase().replace(/\s+/g, '-')}`}
+                  data-testid={`filter-${category.toLowerCase().split(' ').join('-')}`}
                   onClick={() => setActiveCategory(category)}
                   variant={activeCategory === category ? 'default' : 'outline'}
                   className={`font-poppins text-sm ${
@@ -210,6 +202,9 @@ const GalleryPage = () => {
           <DialogTitle className="sr-only">
             Photo — {selectedImage?.category}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Photo de la galerie Léomentia Event en plein écran.
+          </DialogDescription>
           <div className="relative">
             <button
               onClick={closeLightbox}
