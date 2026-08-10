@@ -39,7 +39,24 @@ const LegalPage = () => {
           <Row label="N° TVA intracommunautaire">FR28999705932</Row>
           <Row label="Adresse">39 B rue Émile Zola, 59135 Bellaing</Row>
           <Row label="Directeur de la publication">Virginie Bocquelet</Row>
-          <Row label="Hébergeur du site">Emergent</Row>
+          <Row label="Hébergeur du site">
+            Emergent (Emergent Labs) — Agione Technologies Private Limited.
+            <br />
+            255 California Street, Suite 550, San Francisco, CA 94111, États-Unis.
+            <br />
+            B-1103, Salarpuria Sattva Magnificia, Krishnarajapuram, Bangalore
+            560016, Inde.
+            <br />
+            Site web :{' '}
+            <a
+              href="https://emergent.sh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:underline"
+            >
+              emergent.sh
+            </a>
+          </Row>
         </div>
       </section>
     </div>
