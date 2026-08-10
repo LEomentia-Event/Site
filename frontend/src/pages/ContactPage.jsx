@@ -1,5 +1,6 @@
 import { Seo } from '@/components/Seo';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,6 +23,7 @@ const ContactPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +32,7 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!consent) return;
     setIsSubmitting(true);
 
     try {
@@ -44,6 +47,7 @@ const ContactPage = () => {
         guest_count: '',
         message: '',
       });
+      setConsent(false);
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error('Une erreur est survenue. Veuillez réessayer.');
@@ -321,11 +325,37 @@ const ContactPage = () => {
                     />
                   </div>
 
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      data-testid="consent-checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-1 h-4 w-4 flex-shrink-0 accent-gold cursor-pointer"
+                    />
+                    <Label
+                      htmlFor="consent"
+                      className="font-poppins text-sm text-coffee/70 leading-relaxed cursor-pointer"
+                    >
+                      J'accepte que les informations saisies dans ce formulaire
+                      soient utilisées pour me recontacter dans le cadre de ma
+                      demande.{' '}
+                      <Link
+                        to="/politique-de-confidentialite"
+                        data-testid="consent-learn-more"
+                        className="text-gold underline hover:text-gold-dark"
+                      >
+                        En savoir plus
+                      </Link>
+                    </Label>
+                  </div>
+
                   <Button
                     type="submit"
                     data-testid="submit-contact-form"
-                    disabled={isSubmitting}
-                    className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-8 py-3 w-full sm:w-auto"
+                    disabled={isSubmitting || !consent}
+                    className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-8 py-3 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       'Envoi en cours...'

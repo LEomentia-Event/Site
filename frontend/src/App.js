@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 import HomePage from "@/pages/HomePage";
 import ServicesPage from "@/pages/ServicesPage";
 import GalleryPage from "@/pages/GalleryPage";
@@ -11,6 +12,8 @@ import TestimonialsPage from "@/pages/TestimonialsPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import ContactPage from "@/pages/ContactPage";
+import PrivacyPage from "@/pages/PrivacyPage";
+import LegalPage from "@/pages/LegalPage";
 
 function App() {
   return (
@@ -27,9 +30,12 @@ function App() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/politique-de-confidentialite" element={<PrivacyPage />} />
+              <Route path="/mentions-legales" element={<LegalPage />} />
             </Routes>
           </main>
           <Footer />
+          <CookieConsent />
           <Toaster position="bottom-right" />
         </BrowserRouter>
       </div>

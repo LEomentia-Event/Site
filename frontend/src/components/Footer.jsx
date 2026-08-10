@@ -117,10 +117,26 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-cream/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="font-poppins text-sm text-cream/60 flex items-center">
               © {currentYear} Léomentia Event. Tous droits réservés.
             </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+              <Link
+                to="/politique-de-confidentialite"
+                data-testid="footer-link-privacy"
+                className="font-poppins text-sm text-cream/60 hover:text-peach transition-colors"
+              >
+                Politique de confidentialité
+              </Link>
+              <Link
+                to="/mentions-legales"
+                data-testid="footer-link-legal"
+                className="font-poppins text-sm text-cream/60 hover:text-peach transition-colors"
+              >
+                Mentions légales
+              </Link>
+            </div>
             <p className="font-poppins text-sm text-cream/60 flex items-center">
               Fait avec{' '}
               <Heart className="w-4 h-4 mx-1 text-peach" strokeWidth={1.5} />{' '}

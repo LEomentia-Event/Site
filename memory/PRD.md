@@ -17,7 +17,7 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - Logo SVG : `logo-light.svg` (blanc/or, sur hero sombre) et `logo-dark.svg` (café/or, fond clair) dans `src/assets/`.
 
 ## Pages & routes
-- `/` Accueil, `/services` Services, `/galerie` Galerie, `/temoignages` Témoignages, `/blog` Blog, `/blog/:slug` Article, `/contact` Contact.
+- `/` Accueil, `/services` Services, `/galerie` Galerie, `/temoignages` Témoignages, `/blog` Blog, `/blog/:slug` Article, `/contact` Contact, `/politique-de-confidentialite` (Politique de confidentialité), `/mentions-legales` (Mentions légales).
 
 ## Intégrations
 - Calendly (lien externe + embed iframe sur /contact) : `https://calendly.com/virginie-bocquelet-pro/rdv-avec-virginie-de-leomentia`.
@@ -32,6 +32,7 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - `POST /api/seed` (seed manuel témoignages/blog/galerie)
 
 ## Réalisé (juin 2026)
+- ✅ Conformité RGPD : (1) case de consentement (non pré-cochée) avant l'envoi du formulaire contact, bouton désactivé tant que non cochée, lien « En savoir plus » → politique de confidentialité ; (2) bandeau cookies bas de page au 1er chargement (Accepter/Refuser à égalité + En savoir plus), choix stocké en localStorage (`leomentia-cookie-consent`), analytics PostHog opt-in/opt-out selon consentement ; (3) page `/politique-de-confidentialite` ; (4) page `/mentions-legales` (SIREN 999 705 932, SIRET 999 705 932 00013, TVA FR28999705932, hébergeur Emergent) ; (5) liens footer vers les 2 pages. Composants : `CookieConsent.jsx`, `PrivacyPage.jsx`, `LegalPage.jsx`. ✅ Vérifié testing_agent iteration_10 (frontend 100%).
 - ✅ Vidéo en fond du hero d'accueil : la vidéo Drive `seance-couple-mariage` (id `1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u`) remplace la photo, en autoplay/muet/boucle (`data-testid="hero-video"`), cadrée sur les visages/baiser via `object-[center_35%]`, avec image poster de repli + fondu d'apparition. Autoplay fiabilisé : `muted`/`defaultMuted` forcés via `useRef` + `play()` (fix React muted). Streamée via backend `GET /api/drive/stream/{file_id}` qui **télécharge une seule fois le fichier en cache disque** (`backend/media_cache/`, source `uc?export=download` → repli usercontent → repli API alt=media) puis le sert localement avec support Range (206). Évite les 403 de quota Drive. ✅ Vérifié bug_testing_agent iteration_9 (la vidéo se lance et boucle, frontend+backend 100%).
 - ✅ Email affiché sur le site remplacé par `contact@léomentia-event.fr` (ContactPage + Footer + JSON-LD SEO). NB : les emails du formulaire partent toujours vers l'adresse Gmail (expéditeur vérifié Brevo) — le destinataire n'a pas été changé pour ne pas casser l'envoi.
 - ✅ Correctif bug : logo invisible avant scroll sur l'accueil → logo SVG de marque (variante blanche/or sur hero sombre, café/or sur fond clair). Vérifié testing_agent (iteration_1, 5/5).
