@@ -136,6 +136,14 @@ const Footer = () => {
               >
                 Mentions légales
               </Link>
+              <button
+                type="button"
+                data-testid="footer-manage-cookies"
+                onClick={() => window.dispatchEvent(new Event('open-cookie-consent'))}
+                className="font-poppins text-sm text-cream/60 hover:text-peach transition-colors"
+              >
+                Gérer les cookies
+              </button>
             </div>
             <p className="font-poppins text-sm text-cream/60 flex items-center">
               Fait avec{' '}

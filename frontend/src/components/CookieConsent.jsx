@@ -29,6 +29,10 @@ const CookieConsent = () => {
     } else {
       applyAnalyticsConsent(choice === 'accepted');
     }
+
+    const reopen = () => setVisible(true);
+    window.addEventListener('open-cookie-consent', reopen);
+    return () => window.removeEventListener('open-cookie-consent', reopen);
   }, []);
 
   const handleChoice = (accepted) => {

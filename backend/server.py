@@ -26,7 +26,7 @@ db = client[os.environ['DB_NAME']]
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
 BREVO_SENDER_EMAIL = os.environ.get('BREVO_SENDER_EMAIL', '')
 BREVO_SENDER_NAME = os.environ.get('BREVO_SENDER_NAME', 'Léomentia Event')
-RECIPIENT_EMAIL = 'virginie.bocquelet.pro@gmail.com'
+RECIPIENT_EMAIL = os.environ.get('RECIPIENT_EMAIL', 'contact@xn--lomentia-event-bkb.fr')
 BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/leomentia.event/')
 
