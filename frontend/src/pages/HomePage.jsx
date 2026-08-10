@@ -1,5 +1,5 @@
 import { Seo } from '@/components/Seo';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,8 +22,23 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const HomePage = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [videoReady, setVideoReady] = useState(false);
+  const videoRef = useRef(null);
   const HERO_VIDEO_ID = '1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u';
   const HERO_POSTER = `https://drive.google.com/thumbnail?id=${HERO_VIDEO_ID}&sz=w1600`;
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+    };
+    tryPlay();
+    v.addEventListener('canplay', tryPlay, { once: true });
+    return () => v.removeEventListener('canplay', tryPlay);
+  }, []);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -57,6 +72,7 @@ const HomePage = () => {
             className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
           />
           <video
+            ref={videoRef}
             data-testid="hero-video"
             className={`absolute inset-0 w-full h-full object-cover object-[center_35%] transition-opacity duration-1000 ${
               videoReady ? 'opacity-100' : 'opacity-0'
@@ -65,8 +81,9 @@ const HomePage = () => {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={HERO_POSTER}
+            onLoadedData={() => setVideoReady(true)}
             onCanPlay={() => setVideoReady(true)}
             src={`${API}/drive/stream/${HERO_VIDEO_ID}`}
           />

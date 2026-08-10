@@ -102,7 +102,7 @@ const ContactPage = () => {
                 </a>
 
                 <a
-                  href="mailto:virginie.bocquelet.pro@gmail.com"
+                  href="mailto:contact@léomentia-event.fr"
                   className="flex items-start p-4 rounded-lg hover:bg-cream transition-colors group"
                 >
                   <div className="w-12 h-12 rounded-full bg-peach/20 flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-gold/20 transition-colors">
@@ -113,7 +113,7 @@ const ContactPage = () => {
                       Email
                     </p>
                     <p className="font-poppins text-coffee/70">
-                      virginie.bocquelet.pro@gmail.com
+                      contact@léomentia-event.fr
                     </p>
                   </div>
                 </a>
