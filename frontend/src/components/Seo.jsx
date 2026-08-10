@@ -1,8 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 const SITE_URL = 'https://leomentia-preview.emergent.host';
-const DEFAULT_IMAGE =
-  'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80';
+const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export const Seo = ({ title, description, path = '', image = DEFAULT_IMAGE }) => {
   const url = `${SITE_URL}${path}`;
