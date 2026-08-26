@@ -16,6 +16,10 @@ const UNIVERSE_TAGLINES = {
   'chateau': 'Raffinement, château et grandes tablées',
   'intimiste': 'Petit comité, émotion et proximité',
   'destination': 'Ailleurs, soleil et évasion',
+  'douceur': 'Fleurs de saison et lumière tendre',
+  'printaniere': 'Fleurs de saison et lumière tendre',
+  'romantisme': 'Arches fleuries et élégance délicate',
+  'fleuri': 'Arches fleuries et élégance délicate',
 };
 
 const norm = (s = '') =>
