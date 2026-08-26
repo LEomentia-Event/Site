@@ -35,7 +35,6 @@ const GalleryPage = () => {
   const [albums, setAlbums] = useState([]);
   const [activeAlbum, setActiveAlbum] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -80,19 +79,23 @@ const GalleryPage = () => {
       }
     };
     fetchData();
-
-    axios
-      .get(`${API}/drive/videos`)
-      .then((res) => {
-        if (res.data?.configured) setVideos(res.data.videos || []);
-      })
-      .catch((e) => console.error('Error fetching videos:', e));
   }, []);
 
-  const allImages = albums.flatMap((a) => a.images);
+  const allImages = albums.flatMap((a) => a.images || []);
   const hasUniverses = albums.length > 1;
 
-  const currentImages = activeAlbum ? activeAlbum.images : [];
+  const coverOf = (a) => a?.images?.[0]?.thumb || a?.videos?.[0]?.thumb || null;
+  const countLabel = (a) => {
+    const p = a?.count || (a?.images?.length || 0);
+    const v = a?.video_count || (a?.videos?.length || 0);
+    const parts = [];
+    if (p) parts.push(`${p} ${p > 1 ? 'photos' : 'photo'}`);
+    if (v) parts.push(`${v} ${v > 1 ? 'vidéos' : 'vidéo'}`);
+    return parts.join(' · ') || '—';
+  };
+
+  const currentImages = activeAlbum ? (activeAlbum.images || []) : [];
+  const currentVideos = activeAlbum ? (activeAlbum.videos || []) : [];
 
   const openLightbox = (image, index) => {
     setSelectedImage(image);
@@ -166,19 +169,24 @@ const GalleryPage = () => {
                   key={album.id}
                   data-testid={`universe-card-${norm(album.name).split(' ').join('-')}`}
                   onClick={() => openAlbum(album)}
-                  className="group relative text-left rounded-xl overflow-hidden aspect-[4/5] focus:outline-none"
+                  className="group relative text-left rounded-xl overflow-hidden aspect-[4/5] focus:outline-none bg-coffee"
                 >
-                  <img
-                    src={album.images[0]?.thumb}
-                    alt={album.name}
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {coverOf(album) && (
+                    <img
+                      src={coverOf(album)}
+                      alt={album.name}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-coffee/90 via-coffee/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6">
                     <p className="font-poppins text-xs text-peach uppercase tracking-[0.2em] mb-1">
-                      {album.count} {album.count > 1 ? 'photos' : 'photo'}
+                      {countLabel(album)}
                     </p>
                     <h3 className="font-cormorant text-2xl lg:text-3xl text-cream leading-tight">
                       {album.name}
@@ -238,15 +246,11 @@ const GalleryPage = () => {
                 {activeAlbum?.name || 'Galerie'}
               </h2>
               <span data-testid="gallery-photo-count" className="font-poppins text-sm text-coffee/60 whitespace-nowrap">
-                {currentImages.length} {currentImages.length > 1 ? 'photos' : 'photo'}
+                {countLabel(activeAlbum)}
               </span>
             </div>
 
-            {currentImages.length === 0 ? (
-              <p className="text-center py-20 font-poppins text-coffee/60">
-                Aucune photo pour le moment
-              </p>
-            ) : (
+            {currentImages.length > 0 && (
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
                 {currentImages.map((item, index) => (
                   <div
@@ -267,6 +271,50 @@ const GalleryPage = () => {
                   </div>
                 ))}
               </div>
+            )}
+
+            {currentVideos.length > 0 && (
+              <div className="mt-14" data-testid="album-videos">
+                <div className="flex items-center mb-6">
+                  <span className="font-poppins text-xs text-gold uppercase tracking-[0.2em]">
+                    Vidéos
+                  </span>
+                  <span className="ml-4 h-px flex-1 bg-coffee/10" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {currentVideos.map((video, index) => (
+                    <div
+                      key={video.id}
+                      data-testid={`album-video-${index}`}
+                      onClick={() => setSelectedVideo(video)}
+                      className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group bg-coffee"
+                    >
+                      <img
+                        src={video.thumb}
+                        alt={video.name}
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-coffee/30 group-hover:bg-coffee/10 transition-colors duration-300 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Play className="w-6 h-6 text-coffee ml-1" fill="currentColor" strokeWidth={0} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentImages.length === 0 && currentVideos.length === 0 && (
+              <p className="text-center py-20 font-poppins text-coffee/60">
+                Aucun média pour le moment
+              </p>
             )}
           </div>
         </section>
@@ -319,50 +367,6 @@ const GalleryPage = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Videos */}
-      {videos.length > 0 && (
-        <section className="py-16 lg:py-24 bg-cream" data-testid="video-section">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-4 block">
-                Vidéos
-              </span>
-              <h2 className="font-cormorant text-3xl sm:text-4xl lg:text-5xl text-coffee">
-                L'émotion en mouvement
-              </h2>
-              <div className="section-divider mt-6"></div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {videos.map((video, index) => (
-                <div
-                  key={video.id}
-                  data-testid={`video-item-${index}`}
-                  onClick={() => setSelectedVideo(video)}
-                  className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group bg-coffee"
-                >
-                  <img
-                    src={video.thumb}
-                    alt={video.name}
-                    loading="lazy"
-                    decoding="async"
-                    referrerPolicy="no-referrer"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-coffee/30 group-hover:bg-coffee/10 transition-colors duration-300 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Play className="w-6 h-6 text-coffee ml-1" fill="currentColor" strokeWidth={0} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Video Lightbox */}
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>

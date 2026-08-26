@@ -33,6 +33,11 @@ INSTAGRAM_URL = os.environ.get('INSTAGRAM_URL', 'https://www.instagram.com/leome
 # Google Drive gallery configuration
 GOOGLE_DRIVE_API_KEY = os.environ.get('GOOGLE_DRIVE_API_KEY', '')
 GOOGLE_DRIVE_ROOT_FOLDER_ID = os.environ.get('GOOGLE_DRIVE_ROOT_FOLDER_ID', '')
+GALLERY_EXCLUDE_FOLDERS = [
+    s.strip().lower()
+    for s in os.environ.get('GALLERY_EXCLUDE_FOLDERS', 'Vidéos sur le site').split(',')
+    if s.strip()
+]
 DRIVE_FILES_URL = 'https://www.googleapis.com/drive/v3/files'
 DRIVE_CACHE_TTL = 300  # seconds — auto-refresh window for Drive changes
 _drive_cache = {"data": None, "ts": 0.0}
@@ -411,13 +416,25 @@ async def fetch_drive_albums():
     albums = []
     if folders:
         for f in folders:
+            if f["name"].strip().lower() in GALLERY_EXCLUDE_FOLDERS:
+                continue
             imgs = await _drive_album_images(f["id"])
-            if imgs:
-                albums.append({"id": f["id"], "name": f["name"], "count": len(imgs), "images": imgs})
+            vids = await _drive_folder_videos(f["id"])
+            if imgs or vids:
+                albums.append({
+                    "id": f["id"], "name": f["name"],
+                    "count": len(imgs), "video_count": len(vids),
+                    "images": imgs, "videos": vids,
+                })
     else:
         imgs = await _drive_album_images(GOOGLE_DRIVE_ROOT_FOLDER_ID)
-        if imgs:
-            albums.append({"id": GOOGLE_DRIVE_ROOT_FOLDER_ID, "name": "Galerie", "count": len(imgs), "images": imgs})
+        vids = await _drive_folder_videos(GOOGLE_DRIVE_ROOT_FOLDER_ID)
+        if imgs or vids:
+            albums.append({
+                "id": GOOGLE_DRIVE_ROOT_FOLDER_ID, "name": "Galerie",
+                "count": len(imgs), "video_count": len(vids),
+                "images": imgs, "videos": vids,
+            })
     return albums
 
 
