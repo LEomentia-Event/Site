@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, Quote } from 'lucide-react';
 import axios from 'axios';
+import GoogleReviews from '@/components/GoogleReviews';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -47,6 +48,9 @@ const TestimonialsPage = () => {
           </p>
         </div>
       </section>
+
+      {/* Google Reviews (live) */}
+      <GoogleReviews />
 
       {/* Testimonials Grid */}
       <section className="py-16 lg:py-24 bg-white">

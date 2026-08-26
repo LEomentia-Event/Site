@@ -1,0 +1,19 @@
+{
+  "summary": "Tested new Galerie interactive hotspots, Blog real weddings + article split, Real Wedding detail page, and backend endpoints (blog, blog/{slug}, seed-real-wedding idempotency, google-reviews, drive/albums, drive/videos). All acceptance criteria pass. No regressions on /temoignages and classic articles use their own layout (no real_wedding sections).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "BlogPage articles use data-testid=blog-post-{slug} (not article-{slug}); coherent with prior naming but worth documenting.",
+    "On SPA nav from /blog to /blog/mariage-marie-et-alex, sections need a small delay before selectors resolve (axios fetch). Not a bug but tests should wait_for_selector on prestations/gallery."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "None (public site)",
+  "seed_data_creation": "POST /api/seed-real-wedding called twice; upsert confirmed (still exactly 1 real_wedding).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend endpoints verified via curl on REACT_APP_BACKEND_URL. Frontend verified via Playwright on /galerie (interactive-showcase + hotspot-0..3 + hotspot-card open/close, gallery-item-0 lightbox, video-item-0/iframe/close), /blog (real-weddings-section + real-wedding-mariage-marie-et-alex card + articles-section), /blog/mariage-marie-et-alex (couple_names, venue Domaine en briques, Hauts-de-France, Septembre 2024, real-wedding-prestations with 5 prestation-*, real-wedding-gallery with 8 rw-photo-*, rw-lightbox-close). Classic article /blog/organiser-mariage-sans-stress does NOT show real-wedding sections. /temoignages loads correctly. Google Reviews API returns {configured:false, reviews:[]} (200, no 500). Drive albums/videos OK. Note: single Drive album so universe cards not shown (expected).",
+  "rca of the issue": "N/A"
+}

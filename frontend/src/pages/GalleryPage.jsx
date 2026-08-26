@@ -2,67 +2,81 @@ import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Play, ArrowLeft, ArrowRight } from 'lucide-react';
+import InteractiveShowcase from '@/components/InteractiveShowcase';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Petites accroches par univers (par nom d'album Drive, insensible à la casse/accents)
+const UNIVERSE_TAGLINES = {
+  'champetre': 'Pampa, bois brut et douceur bohème',
+  'boheme': 'Liberté, fleurs séchées et lumière dorée',
+  'elegant': 'Raffinement, château et grandes tablées',
+  'chateau': 'Raffinement, château et grandes tablées',
+  'intimiste': 'Petit comité, émotion et proximité',
+  'destination': 'Ailleurs, soleil et évasion',
+};
+
+const norm = (s = '') =>
+  s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const taglineFor = (name) => {
+  const n = norm(name);
+  const key = Object.keys(UNIVERSE_TAGLINES).find((k) => n.includes(k));
+  return key ? UNIVERSE_TAGLINES[key] : 'Une ambiance pensée sur-mesure';
+};
+
 const GalleryPage = () => {
-  const [gallery, setGallery] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState('Tous');
+  const [albums, setAlbums] = useState([]);
+  const [activeAlbum, setActiveAlbum] = useState(null);
   const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    const mapMongo = (data) =>
-      data.map((it) => ({
-        id: it.id,
-        category: it.category,
-        title: it.title,
-        description: it.description,
-        thumb: it.image_url,
-        full: it.image_url,
+    const mapMongoToAlbum = (data) => {
+      const byCat = {};
+      data.forEach((it) => {
+        (byCat[it.category] = byCat[it.category] || []).push({
+          id: it.id,
+          thumb: it.image_url,
+          full: it.image_url,
+          name: it.title,
+        });
+      });
+      return Object.entries(byCat).map(([name, images], i) => ({
+        id: `mongo-${i}`,
+        name,
+        count: images.length,
+        images,
       }));
+    };
 
     const fetchData = async () => {
       try {
         const driveRes = await axios.get(`${API}/drive/albums`);
         if (driveRes.data?.configured && driveRes.data.albums?.length) {
-          const items = [];
-          driveRes.data.albums.forEach((album) => {
-            album.images.forEach((img) => {
-              items.push({
-                id: img.id,
-                category: album.name,
-                thumb: img.thumb,
-                full: img.full,
-              });
-            });
-          });
-          setGallery(items);
+          setAlbums(driveRes.data.albums);
+          if (driveRes.data.albums.length === 1) {
+            setActiveAlbum(driveRes.data.albums[0]);
+          }
         } else {
           const res = await axios.get(`${API}/gallery`);
-          setGallery(mapMongo(res.data));
+          const a = mapMongoToAlbum(res.data);
+          setAlbums(a);
+          if (a.length === 1) setActiveAlbum(a[0]);
         }
       } catch (e) {
         console.error('Error fetching gallery:', e);
-        try {
-          const res = await axios.get(`${API}/gallery`);
-          setGallery(mapMongo(res.data));
-        } catch (err) {
-          console.error('Fallback gallery failed:', err);
-        }
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
 
-  useEffect(() => {
     axios
       .get(`${API}/drive/videos`)
       .then((res) => {
@@ -71,41 +85,40 @@ const GalleryPage = () => {
       .catch((e) => console.error('Error fetching videos:', e));
   }, []);
 
-  const categories = ['Tous', ...new Set(gallery.map((item) => item.category))];
+  const allImages = albums.flatMap((a) => a.images);
+  const hasUniverses = albums.length > 1;
 
-  const filteredGallery =
-    activeCategory === 'Tous'
-      ? gallery
-      : gallery.filter((item) => item.category === activeCategory);
+  const currentImages = activeAlbum ? activeAlbum.images : [];
 
   const openLightbox = (image, index) => {
     setSelectedImage(image);
     setSelectedIndex(index);
   };
-
   const closeLightbox = () => setSelectedImage(null);
-
   const goToPrevious = () => {
-    const newIndex =
-      selectedIndex === 0 ? filteredGallery.length - 1 : selectedIndex - 1;
-    setSelectedIndex(newIndex);
-    setSelectedImage(filteredGallery[newIndex]);
+    const i = selectedIndex === 0 ? currentImages.length - 1 : selectedIndex - 1;
+    setSelectedIndex(i);
+    setSelectedImage(currentImages[i]);
+  };
+  const goToNext = () => {
+    const i = selectedIndex === currentImages.length - 1 ? 0 : selectedIndex + 1;
+    setSelectedIndex(i);
+    setSelectedImage(currentImages[i]);
   };
 
-  const goToNext = () => {
-    const newIndex =
-      selectedIndex === filteredGallery.length - 1 ? 0 : selectedIndex + 1;
-    setSelectedIndex(newIndex);
-    setSelectedImage(filteredGallery[newIndex]);
+  const openAlbum = (album) => {
+    setActiveAlbum(album);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div data-testid="gallery-page" className="pt-20">
       <Seo
         title="Galerie de mariages — Léomentia Event"
-        description="Découvrez une sélection de mariages et événements élégants orchestrés par Léomentia Event, wedding planner & designer en France."
+        description="Explorez nos univers de mariage : champêtre, élégant, intimiste, destination. Une sélection de réalisations élégantes signées Léomentia Event."
         path="/galerie"
       />
+
       {/* Hero */}
       <section className="py-24 lg:py-32 bg-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -113,73 +126,125 @@ const GalleryPage = () => {
             Portfolio
           </span>
           <h1 className="font-cormorant text-4xl sm:text-5xl lg:text-6xl text-coffee mb-6">
-            Des mariages pensés dans les moindres détails
+            Explorez nos univers de mariage
           </h1>
           <p className="font-poppins text-lg text-coffee/70 max-w-2xl mx-auto">
-            Découvrez une sélection de mariages et événements que j'ai eu le
-            plaisir d'accompagner.
+            Chaque mariage raconte une ambiance. Choisissez l'univers qui vous
+            ressemble et laissez-vous inspirer.
           </p>
         </div>
       </section>
 
-      {/* Category Filter */}
-      {categories.length > 1 && (
-        <section className="py-8 bg-white border-b border-coffee/10 sticky top-20 z-30">
+      {/* Interactive showcase (photo à points chauds) */}
+      <InteractiveShowcase />
+
+      {/* Universe cards OR album grid */}
+      {loading ? (
+        <section className="py-24 bg-white text-center">
+          <p className="font-poppins text-coffee/60">Chargement...</p>
+        </section>
+      ) : !activeAlbum && hasUniverses ? (
+        <section className="py-16 lg:py-24 bg-white" data-testid="universe-grid">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  data-testid={`filter-${category.toLowerCase().split(' ').join('-')}`}
-                  onClick={() => setActiveCategory(category)}
-                  variant={activeCategory === category ? 'default' : 'outline'}
-                  className={`font-poppins text-sm ${
-                    activeCategory === category
-                      ? 'bg-gold hover:bg-gold-dark text-white'
-                      : 'border-coffee/20 text-coffee hover:bg-coffee/5'
-                  }`}
+            <div className="text-center mb-12">
+              <span className="font-poppins text-gold text-sm uppercase tracking-[0.2em] mb-3 block">
+                Nos univers
+              </span>
+              <h2 className="font-cormorant text-3xl sm:text-4xl text-coffee">
+                Dans quel décor vous imaginez-vous ?
+              </h2>
+              <div className="section-divider mt-6" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {albums.map((album) => (
+                <button
+                  key={album.id}
+                  data-testid={`universe-card-${norm(album.name).split(' ').join('-')}`}
+                  onClick={() => openAlbum(album)}
+                  className="group relative text-left rounded-xl overflow-hidden aspect-[4/5] focus:outline-none"
                 >
-                  {category}
-                </Button>
+                  <img
+                    src={album.images[0]?.thumb}
+                    alt={album.name}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-coffee/90 via-coffee/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <p className="font-poppins text-xs text-peach uppercase tracking-[0.2em] mb-1">
+                      {album.count} {album.count > 1 ? 'photos' : 'photo'}
+                    </p>
+                    <h3 className="font-cormorant text-2xl lg:text-3xl text-cream leading-tight">
+                      {album.name}
+                    </h3>
+                    <p className="font-poppins text-sm text-cream/70 mt-1">
+                      {taglineFor(album.name)}
+                    </p>
+                    <span className="inline-flex items-center mt-4 font-poppins text-sm text-peach opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300">
+                      Découvrir <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
+                    </span>
+                  </div>
+                </button>
               ))}
+
+              {/* Toutes les photos */}
+              <button
+                data-testid="universe-card-toutes"
+                onClick={() =>
+                  openAlbum({ id: 'all', name: 'Toutes les photos', count: allImages.length, images: allImages })
+                }
+                className="group relative text-left rounded-xl overflow-hidden aspect-[4/5] bg-coffee focus:outline-none flex items-center justify-center"
+              >
+                <div className="text-center px-6">
+                  <h3 className="font-cormorant text-2xl lg:text-3xl text-cream">
+                    Toutes les photos
+                  </h3>
+                  <p className="font-poppins text-sm text-cream/60 mt-2">
+                    {allImages.length} clichés
+                  </p>
+                  <span className="inline-flex items-center mt-4 font-poppins text-sm text-peach">
+                    Tout voir <ArrowRight className="w-4 h-4 ml-2" strokeWidth={1.5} />
+                  </span>
+                </div>
+              </button>
             </div>
           </div>
         </section>
-      )}
+      ) : (
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {hasUniverses && (
+              <button
+                data-testid="back-to-universes"
+                onClick={() => {
+                  setActiveAlbum(null);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center font-poppins text-sm text-coffee/70 hover:text-gold transition-colors mb-8"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                Retour aux univers
+              </button>
+            )}
 
-      {/* Gallery Grid (masonry) */}
-      <section className="py-16 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {loading ? (
-            <div className="text-center py-20">
-              <p className="font-poppins text-coffee/60">Chargement...</p>
+            <div className="flex items-end justify-between mb-10">
+              <h2 data-testid="gallery-album-title" className="font-cormorant text-3xl sm:text-4xl text-coffee">
+                {activeAlbum?.name || 'Galerie'}
+              </h2>
+              <span data-testid="gallery-photo-count" className="font-poppins text-sm text-coffee/60 whitespace-nowrap">
+                {currentImages.length} {currentImages.length > 1 ? 'photos' : 'photo'}
+              </span>
             </div>
-          ) : filteredGallery.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="font-poppins text-coffee/60">
+
+            {currentImages.length === 0 ? (
+              <p className="text-center py-20 font-poppins text-coffee/60">
                 Aucune photo pour le moment
               </p>
-            </div>
-          ) : (
-            <>
-              <div className="flex items-end justify-between mb-10">
-                <h2
-                  data-testid="gallery-album-title"
-                  className="font-cormorant text-3xl sm:text-4xl text-coffee"
-                >
-                  {activeCategory === 'Tous' ? 'Toutes les photos' : activeCategory}
-                </h2>
-                <span
-                  data-testid="gallery-photo-count"
-                  className="font-poppins text-sm text-coffee/60 whitespace-nowrap"
-                >
-                  {filteredGallery.length}{' '}
-                  {filteredGallery.length > 1 ? 'photos' : 'photo'}
-                </span>
-              </div>
-
+            ) : (
               <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
-                {filteredGallery.map((item, index) => (
+                {currentImages.map((item, index) => (
                   <div
                     key={item.id}
                     data-testid={`gallery-item-${index}`}
@@ -188,31 +253,25 @@ const GalleryPage = () => {
                   >
                     <img
                       src={item.thumb}
-                      alt={item.title || item.category}
+                      alt={item.name || activeAlbum?.name}
                       loading="lazy"
                       decoding="async"
                       referrerPolicy="no-referrer"
                       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-coffee/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                      <span className="font-poppins text-sm text-peach uppercase tracking-wider">
-                        {item.category}
-                      </span>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-coffee/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
-            </>
-          )}
-        </div>
-      </section>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Lightbox */}
       <Dialog open={!!selectedImage} onOpenChange={closeLightbox}>
         <DialogContent className="max-w-5xl bg-coffee/95 border-none p-0">
-          <DialogTitle className="sr-only">
-            Photo — {selectedImage?.category}
-          </DialogTitle>
+          <DialogTitle className="sr-only">Photo — {activeAlbum?.name}</DialogTitle>
           <DialogDescription className="sr-only">
             Photo de la galerie Léomentia Event en plein écran.
           </DialogDescription>
@@ -224,8 +283,7 @@ const GalleryPage = () => {
             >
               <X className="w-5 h-5 text-white" strokeWidth={1.5} />
             </button>
-
-            {filteredGallery.length > 1 && (
+            {currentImages.length > 1 && (
               <>
                 <button
                   onClick={goToPrevious}
@@ -243,26 +301,15 @@ const GalleryPage = () => {
                 </button>
               </>
             )}
-
             {selectedImage && (
               <div className="p-4">
                 <img
                   key={selectedImage.id}
                   src={selectedImage.full}
-                  alt={selectedImage.title || selectedImage.category}
+                  alt={selectedImage.name || activeAlbum?.name}
                   referrerPolicy="no-referrer"
                   className="w-full max-h-[80vh] object-contain rounded-lg animate-fade-in"
                 />
-                <div className="mt-4 text-center">
-                  <span className="font-poppins text-sm text-peach uppercase tracking-wider">
-                    {selectedImage.category}
-                  </span>
-                  {selectedImage.description && (
-                    <p className="font-poppins text-cream/70 mt-2">
-                      {selectedImage.description}
-                    </p>
-                  )}
-                </div>
               </div>
             )}
           </div>
@@ -362,7 +409,7 @@ const GalleryPage = () => {
               data-testid="cta-calendly-gallery"
               className="bg-gold hover:bg-gold-dark text-white font-poppins text-sm uppercase tracking-wider px-10 py-6"
             >
-              Réserver un appel découverte
+              Discutons de votre mariage
             </Button>
           </a>
         </div>

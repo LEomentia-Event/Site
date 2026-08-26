@@ -41,6 +41,16 @@ MEDIA_CACHE_DIR = ROOT_DIR / "media_cache"
 MEDIA_CACHE_DIR.mkdir(exist_ok=True)
 _media_locks = {}
 
+# Google Places (business reviews) configuration
+GOOGLE_PLACES_API_KEY = os.environ.get('GOOGLE_PLACES_API_KEY', '')
+GOOGLE_PLACE_ID = os.environ.get('GOOGLE_PLACE_ID', '')
+GOOGLE_PLACE_QUERY = os.environ.get('GOOGLE_PLACE_QUERY', 'Léomentia Event')
+PLACES_SEARCH_URL = 'https://places.googleapis.com/v1/places:searchText'
+PLACES_DETAILS_URL = 'https://places.googleapis.com/v1/places/'
+REVIEWS_CACHE_TTL = 3600  # short in-memory cache (1h) to limit Places billing
+_reviews_cache = {"data": None, "ts": 0.0}
+_resolved_place_id = {"id": GOOGLE_PLACE_ID or None}
+
 # Create the main app
 app = FastAPI()
 
@@ -105,6 +115,14 @@ class BlogPost(BaseModel):
     category: str
     author: str = "Virginie Bocquelet"
     is_published: bool = True
+    post_type: str = "article"  # "article" | "real_wedding"
+    couple_names: Optional[str] = None
+    location: Optional[str] = None
+    venue: Optional[str] = None
+    event_date: Optional[str] = None
+    prestations: List[str] = []
+    gallery_images: List[str] = []
+    drive_folder_id: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class BlogPostCreate(BaseModel):
@@ -116,6 +134,14 @@ class BlogPostCreate(BaseModel):
     category: str
     author: str = "Virginie Bocquelet"
     is_published: bool = True
+    post_type: str = "article"
+    couple_names: Optional[str] = None
+    location: Optional[str] = None
+    venue: Optional[str] = None
+    event_date: Optional[str] = None
+    prestations: List[str] = []
+    gallery_images: List[str] = []
+    drive_folder_id: Optional[str] = None
 
 class GalleryItem(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -294,6 +320,15 @@ async def get_blog_post(slug: str):
         raise HTTPException(status_code=404, detail="Article non trouvé")
     if isinstance(post.get('created_at'), str):
         post['created_at'] = datetime.fromisoformat(post['created_at'])
+    # Real weddings: resolve gallery from a Drive folder if provided and not preset
+    if post.get('post_type') == 'real_wedding' and post.get('drive_folder_id') and not post.get('gallery_images'):
+        try:
+            imgs = await _drive_album_images(post['drive_folder_id'])
+            post['gallery_images'] = [i['full'] for i in imgs]
+            if not post.get('image_url') and imgs:
+                post['image_url'] = imgs[0]['full']
+        except Exception as e:
+            logger.error(f"Real wedding drive resolve failed: {e}")
     return post
 
 @api_router.post("/blog", response_model=BlogPost)
@@ -557,6 +592,90 @@ async def stream_drive_file(file_id: str, request: Request):
     )
 
 
+# Google Places reviews endpoint
+async def _resolve_place_id():
+    """Return the Place ID: use configured value, else resolve via Text Search (New)."""
+    if _resolved_place_id["id"]:
+        return _resolved_place_id["id"]
+    headers = {
+        "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
+        "X-Goog-FieldMask": "places.id,places.displayName",
+        "Content-Type": "application/json",
+    }
+    async with httpx.AsyncClient(timeout=15) as c:
+        r = await c.post(PLACES_SEARCH_URL, headers=headers,
+                         json={"textQuery": GOOGLE_PLACE_QUERY, "languageCode": "fr"})
+    if r.status_code != 200:
+        logger.error(f"Places searchText error {r.status_code}: {r.text[:300]}")
+        raise HTTPException(status_code=502, detail="Google Places search error")
+    places = r.json().get("places", [])
+    if not places:
+        raise HTTPException(status_code=404, detail="Fiche Google introuvable")
+    _resolved_place_id["id"] = places[0]["id"]
+    logger.info(f"Resolved Google Place ID: {_resolved_place_id['id']}")
+    return _resolved_place_id["id"]
+
+
+async def _fetch_place_details(place_id: str):
+    field_mask = "id,displayName,rating,userRatingCount,googleMapsUri,reviews"
+    headers = {
+        "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
+        "X-Goog-FieldMask": field_mask,
+    }
+    async with httpx.AsyncClient(timeout=15) as c:
+        r = await c.get(f"{PLACES_DETAILS_URL}{place_id}", headers=headers,
+                        params={"languageCode": "fr"})
+    if r.status_code != 200:
+        logger.error(f"Places details error {r.status_code}: {r.text[:300]}")
+        raise HTTPException(status_code=502, detail="Google Places details error")
+    return r.json()
+
+
+def _normalize_reviews(p: dict):
+    reviews = []
+    for rv in p.get("reviews", []):
+        author = rv.get("authorAttribution") or {}
+        text = rv.get("text") or rv.get("originalText") or {}
+        reviews.append({
+            "author_name": author.get("displayName", "Utilisateur Google"),
+            "author_photo": author.get("photoUri"),
+            "author_uri": author.get("uri"),
+            "rating": rv.get("rating"),
+            "text": text.get("text", ""),
+            "relative_time": rv.get("relativePublishTimeDescription"),
+            "google_maps_uri": rv.get("googleMapsUri"),
+        })
+    return {
+        "place_id": p.get("id"),
+        "business_name": (p.get("displayName") or {}).get("text"),
+        "rating": p.get("rating"),
+        "total_ratings": p.get("userRatingCount", 0),
+        "google_maps_uri": p.get("googleMapsUri"),
+        "reviews": reviews,
+    }
+
+
+@api_router.get("/google-reviews")
+async def get_google_reviews(refresh: int = 0):
+    """Live Google Business reviews via Places API (New). Up to 5 reviews."""
+    if not GOOGLE_PLACES_API_KEY:
+        return {"configured": False, "reviews": []}
+    now = time.time()
+    if not refresh and _reviews_cache["data"] is not None and (now - _reviews_cache["ts"] < REVIEWS_CACHE_TTL):
+        return {"configured": True, "cached": True, **_reviews_cache["data"]}
+    try:
+        place_id = await _resolve_place_id()
+        details = await _fetch_place_details(place_id)
+        data = _normalize_reviews(details)
+        _reviews_cache["data"] = data
+        _reviews_cache["ts"] = now
+        return {"configured": True, "cached": False, **data}
+    except HTTPException:
+        if _reviews_cache["data"] is not None:
+            return {"configured": True, "cached": True, **_reviews_cache["data"]}
+        raise
+
+
 # Seed data endpoint (for initial setup)
 @api_router.post("/seed")
 async def seed_data():
@@ -748,6 +867,63 @@ async def seed_data():
     await db.gallery.insert_many(gallery_items)
     
     return {"message": "Data seeded successfully"}
+
+@api_router.post("/seed-real-wedding")
+async def seed_real_wedding():
+    """Idempotent example 'real wedding' post (by slug) so the format is visible."""
+    slug = "mariage-marie-et-alex"
+    ids = [
+        "16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH",  # entrée de salle
+        "1z3GBtqKNcmXLGNGU1UwHkyHI-KqbBfsD",  # mariés célébration
+        "1yMEBvlmgt9lTYuK20Q4GErDcPE0mkYFq",  # bouquet mariée
+        "1IYERsW0V_4SpYYUYHv9Q_O3TTtk86clG",  # décoration table
+        "1NLsCagTbEp-4CtFaWexfTKL2BjwzwX5_",  # first look
+        "1SizRqEVxJakiODw8Sau424Ysp0lW-K6-",  # ouverture de bal
+        "151syY4WxwDbCrsCTkN6xAWZX1FZ6ZQ2m",  # table champêtre
+        "18u3S2YaVbQEm-D0E7uXYeVLnjsHZAFUX",  # panneau accueil
+    ]
+    gallery = [f"https://drive.google.com/thumbnail?id={i}&sz=w2000" for i in ids]
+    doc = {
+        "id": str(uuid.uuid4()),
+        "title": "Le mariage champêtre chic de Marie & Alex",
+        "slug": slug,
+        "excerpt": "Un mariage tout en douceur, entre pampa, roses poudrées et lumière dorée. "
+                   "Retour sur une journée pensée dans les moindres détails.",
+        "content": (
+            "<p>Quand Marie et Alex m'ont contactée, ils rêvaient d'un mariage chaleureux, "
+            "élégant mais sans chichis, où chaque invité se sentirait comme à la maison. "
+            "Nous avons imaginé ensemble une ambiance champêtre chic : pampa, roses poudrées, "
+            "bougies et vaisselle raffinée sous les voûtes de brique d'un lieu plein de caractère.</p>"
+            "<h3>Une scénographie sur-mesure</h3>"
+            "<p>De l'arche fleurie de la cérémonie à la mise en lumière du dîner, chaque espace a "
+            "été scénographié pour raconter leur histoire. Le fil rouge : la délicatesse.</p>"
+            "<h3>Le jour J, sans stress</h3>"
+            "<p>Le jour J, mon équipe et moi avons coordonné l'ensemble des prestataires pour que "
+            "Marie et Alex n'aient qu'une chose à faire : profiter, pleinement.</p>"
+        ),
+        "image_url": gallery[0],
+        "category": "Mariage réel",
+        "author": "Virginie Bocquelet",
+        "is_published": True,
+        "post_type": "real_wedding",
+        "couple_names": "Marie & Alex",
+        "location": "Hauts-de-France",
+        "venue": "Domaine en briques",
+        "event_date": "Septembre 2024",
+        "prestations": [
+            "Recherche & négociation du lieu",
+            "Scénographie florale sur-mesure",
+            "Coordination des prestataires",
+            "Art de la table & décoration",
+            "Coordination du jour J",
+        ],
+        "gallery_images": gallery,
+        "drive_folder_id": None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.blog_posts.update_one({"slug": slug}, {"$set": doc}, upsert=True)
+    return {"message": "Real wedding example seeded", "slug": slug}
+
 
 # Include the router in the main app
 app.include_router(api_router)
