@@ -400,7 +400,7 @@ const HomePage = () => {
                 key={index}
                 className="service-card bg-white border-coffee/10 overflow-hidden group"
               >
-                <div className="aspect-video overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={service.image}
                     alt={service.title}
