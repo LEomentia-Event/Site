@@ -365,7 +365,7 @@ const HomePage = () => {
                   'Suivi personnalisé',
                 ],
                 image:
-                  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80',
+                  'https://drive.google.com/thumbnail?id=1Mf7XU9ALyaMwIr_Tw2cAHkvsODJT1kr9&sz=w1200',
               },
               {
                 title: 'Coordination jour J',
@@ -404,6 +404,7 @@ const HomePage = () => {
                   <img
                     src={service.image}
                     alt={service.title}
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>

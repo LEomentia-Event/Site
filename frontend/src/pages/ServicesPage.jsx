@@ -43,7 +43,7 @@ const ServicesPage = () => {
         'Suivi jusqu\'au mariage',
         'Coordination le jour J',
       ],
-      image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80',
+      image: 'https://drive.google.com/thumbnail?id=1Mf7XU9ALyaMwIr_Tw2cAHkvsODJT1kr9&sz=w1200',
       popular: false,
     },
     {
@@ -146,6 +146,7 @@ const ServicesPage = () => {
                     <img
                       src={service.image}
                       alt={service.title}
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
                     {service.popular && (
