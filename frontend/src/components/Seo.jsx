@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = 'https://leomentia-preview.emergent.host';
+const SITE_URL = 'https://xn--lomentia-event-bkb.fr';
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 export const Seo = ({ title, description, path = '', image = DEFAULT_IMAGE }) => {
