@@ -208,8 +208,9 @@ const HomePage = () => {
             <div className="relative">
               <div className="aspect-[4/5] rounded-lg overflow-hidden img-zoom">
                 <img
-                  src="https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/cqg9s9l3_Virginie%20%26%20Alex-490.jpg"
-                  alt="Virginie Bocquelet - Wedding Planner"
+                  src="https://drive.google.com/thumbnail?id=13y4SabSJkFpooUyhS_6GzOf756S8O9BL&sz=w1600"
+                  alt="Virginie Bocquelet - Wedding Planner & Designer"
+                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
               </div>
