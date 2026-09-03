@@ -232,3 +232,24 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* Avis Google — carrousel défilant */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.reviews-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 45s linear infinite;
+}
+.reviews-marquee:hover {
+  animation-play-state: paused;
+}
+.reviews-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-marquee { animation: none; }
+}

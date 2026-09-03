@@ -621,7 +621,8 @@ async def _resolve_place_id():
     }
     async with httpx.AsyncClient(timeout=15) as c:
         r = await c.post(PLACES_SEARCH_URL, headers=headers,
-                         json={"textQuery": GOOGLE_PLACE_QUERY, "languageCode": "fr"})
+                         json={"textQuery": GOOGLE_PLACE_QUERY, "languageCode": "fr",
+                               "regionCode": "FR", "includePureServiceAreaBusinesses": True})
     if r.status_code != 200:
         logger.error(f"Places searchText error {r.status_code}: {r.text[:300]}")
         raise HTTPException(status_code=502, detail="Google Places search error")
@@ -674,23 +675,42 @@ def _normalize_reviews(p: dict):
 
 @api_router.get("/google-reviews")
 async def get_google_reviews(refresh: int = 0):
-    """Live Google Business reviews via Places API (New). Up to 5 reviews."""
-    if not GOOGLE_PLACES_API_KEY:
-        return {"configured": False, "reviews": []}
-    now = time.time()
-    if not refresh and _reviews_cache["data"] is not None and (now - _reviews_cache["ts"] < REVIEWS_CACHE_TTL):
-        return {"configured": True, "cached": True, **_reviews_cache["data"]}
-    try:
-        place_id = await _resolve_place_id()
-        details = await _fetch_place_details(place_id)
-        data = _normalize_reviews(details)
-        _reviews_cache["data"] = data
-        _reviews_cache["ts"] = now
-        return {"configured": True, "cached": False, **data}
-    except HTTPException:
-        if _reviews_cache["data"] is not None:
-            return {"configured": True, "cached": True, **_reviews_cache["data"]}
-        raise
+    """Google Business reviews. Live via Places API if a key is set, else manual reviews from DB."""
+    # 1) Live via Places API (New)
+    if GOOGLE_PLACES_API_KEY:
+        now = time.time()
+        if not refresh and _reviews_cache["data"] is not None and (now - _reviews_cache["ts"] < REVIEWS_CACHE_TTL):
+            return {"configured": True, "source": "live", "cached": True, **_reviews_cache["data"]}
+        try:
+            place_id = await _resolve_place_id()
+            details = await _fetch_place_details(place_id)
+            data = _normalize_reviews(details)
+            _reviews_cache["data"] = data
+            _reviews_cache["ts"] = now
+            return {"configured": True, "source": "live", "cached": False, **data}
+        except HTTPException:
+            if _reviews_cache["data"] is not None:
+                return {"configured": True, "source": "live", "cached": True, **_reviews_cache["data"]}
+    # 2) Manual reviews stored in DB (real reviews copied from the Google page)
+    manual = await db.manual_google_reviews.find_one({"_id": "leomentia"}, {"_id": 0})
+    if manual and manual.get("reviews"):
+        return {"configured": True, "source": "manual", **manual}
+    # 3) Nothing configured yet
+    return {"configured": False, "reviews": []}
+
+
+@api_router.post("/manual-reviews")
+async def set_manual_reviews(payload: dict):
+    """Store real Google reviews copied from the business page (used when no API key)."""
+    reviews = payload.get("reviews", [])
+    doc = {
+        "rating": payload.get("rating", 5.0),
+        "total_ratings": payload.get("total_ratings", len(reviews)),
+        "google_maps_uri": payload.get("google_maps_uri", ""),
+        "reviews": reviews,
+    }
+    await db.manual_google_reviews.update_one({"_id": "leomentia"}, {"$set": doc}, upsert=True)
+    return {"message": "Manual reviews saved", "count": len(reviews)}
 
 
 # Seed data endpoint (for initial setup)
