@@ -351,7 +351,7 @@ const HomePage = () => {
                   'Installation et coordination du jour J',
                 ],
                 image:
-                  'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80',
+                  'https://drive.google.com/thumbnail?id=1gk4bB4R7TRtbvpZ4lJ7VCuma5xraINNy&sz=w1200',
               },
               {
                 title: 'Organisation partielle & design',

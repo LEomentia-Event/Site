@@ -24,7 +24,7 @@ const ServicesPage = () => {
         'Installation et coordination le jour J',
         'Présence de 8h du matin au dernier invité',
       ],
-      image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
+      image: 'https://drive.google.com/thumbnail?id=1gk4bB4R7TRtbvpZ4lJ7VCuma5xraINNy&sz=w1200',
       popular: true,
     },
     {
