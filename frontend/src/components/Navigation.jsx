@@ -117,14 +117,28 @@ const Navigation = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (full-screen, solid) */}
       <div
         data-testid="mobile-menu"
-        className={`lg:hidden fixed inset-0 top-20 bg-cream z-40 transform transition-transform duration-300 ${
+        style={{ backgroundColor: '#FFFCF8' }}
+        className={`lg:hidden fixed inset-0 z-[70] transform transition-transform duration-300 overflow-y-auto ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-full space-y-8 p-8">
+        {/* Menu header with logo + close */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
+          <img src={logoDark} alt="Léomentia Event" className="h-12 w-auto" />
+          <button
+            data-testid="mobile-menu-close"
+            onClick={() => setIsOpen(false)}
+            className="p-2 text-coffee hover:text-gold transition-colors"
+            aria-label="Fermer le menu"
+          >
+            <X className="w-6 h-6" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center justify-center space-y-8 p-8 pt-10">
           {navLinks.map((link) => (
             <Link
               key={link.path}
