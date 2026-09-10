@@ -393,7 +393,7 @@ const HomePage = () => {
                   'Conseil stratégique',
                 ],
                 image:
-                  'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80',
+                  'https://drive.google.com/thumbnail?id=1_psikxCfOSy_9QrszabVVL9QWXoBNxhN&sz=w1200',
               },
             ].map((service, index) => (
               <Card
