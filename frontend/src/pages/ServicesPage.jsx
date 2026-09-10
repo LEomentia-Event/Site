@@ -62,7 +62,7 @@ const ServicesPage = () => {
         'Point de contact unique pour les prestataires',
         'Gestion des imprévus',
       ],
-      image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80',
+      image: 'https://drive.google.com/thumbnail?id=1L-GDJvqN-S7b0l4qfTqzoro7kME7C60O&sz=w1200',
       popular: false,
     },
     {

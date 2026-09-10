@@ -379,7 +379,7 @@ const HomePage = () => {
                   'Vous profitez pleinement',
                 ],
                 image:
-                  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80',
+                  'https://drive.google.com/thumbnail?id=1L-GDJvqN-S7b0l4qfTqzoro7kME7C60O&sz=w1200',
               },
               {
                 title: 'Accompagnement sur mesure',
