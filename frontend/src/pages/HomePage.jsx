@@ -595,7 +595,7 @@ const HomePage = () => {
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1920&q=80')`,
+              backgroundImage: `url('https://drive.google.com/thumbnail?id=1FRbJBxMw3wjTIyp2jtbw770Y3_r7VSs8&sz=w1920')`,
             }}
           ></div>
         </div>
