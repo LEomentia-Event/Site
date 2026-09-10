@@ -42,6 +42,7 @@ const Navigation = () => {
   const baseText = lightMode ? 'text-cream' : 'text-coffee';
 
   return (
+    <>
     <nav
       data-testid="main-navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -116,6 +117,7 @@ const Navigation = () => {
           </button>
         </div>
       </div>
+    </nav>
 
       {/* Mobile Menu (full-screen, solid) */}
       <div
@@ -173,7 +175,7 @@ const Navigation = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
