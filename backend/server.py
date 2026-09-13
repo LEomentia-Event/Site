@@ -786,7 +786,7 @@ async def seed_data():
 
 <h3>3. Faites-vous accompagner</h3>
 <p>Un wedding planner peut vous faire gagner un temps précieux et vous éviter bien des erreurs. C'est un investissement qui vaut la peine.</p>""",
-            "image_url": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
+            "image_url": "https://drive.google.com/thumbnail?id=1VTubjds0cOH_ptnsddoeymk9LUqSfUpj&sz=w1200",
             "category": "Organisation",
             "author": "Virginie Bocquelet",
             "is_published": True,
@@ -810,7 +810,7 @@ async def seed_data():
 
 <h3>Ce que vous gagnez</h3>
 <p>Au-delà du temps économisé, un wedding planner vous fait bénéficier de son réseau de prestataires, de tarifs négociés et de son expertise pour éviter les erreurs coûteuses.</p>""",
-            "image_url": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800",
+            "image_url": "https://drive.google.com/thumbnail?id=1IYERsW0V_4SpYYUYHv9Q_O3TTtk86clG&sz=w1200",
             "category": "Budget",
             "author": "Virginie Bocquelet",
             "is_published": True,
@@ -838,7 +838,7 @@ async def seed_data():
 
 <h3>5. Sous-estimer la fatigue</h3>
 <p>Les derniers jours avant le mariage sont intenses. Gardez de l'énergie pour le jour J !</p>""",
-            "image_url": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800",
+            "image_url": "https://drive.google.com/thumbnail?id=16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH&sz=w1200",
             "category": "Conseils",
             "author": "Virginie Bocquelet",
             "is_published": True,
