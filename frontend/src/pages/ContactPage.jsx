@@ -106,7 +106,7 @@ const ContactPage = () => {
                 </a>
 
                 <a
-                  href="mailto:contact@léomentia-event.fr"
+                  href="mailto:contact@leomentia-event.fr"
                   className="flex items-start p-4 rounded-lg hover:bg-cream transition-colors group"
                 >
                   <div className="w-12 h-12 rounded-full bg-peach/20 flex items-center justify-center mr-4 flex-shrink-0 group-hover:bg-gold/20 transition-colors">
@@ -117,7 +117,7 @@ const ContactPage = () => {
                       Email
                     </p>
                     <p className="font-poppins text-coffee/70">
-                      contact@léomentia-event.fr
+                      contact@leomentia-event.fr
                     </p>
                   </div>
                 </a>

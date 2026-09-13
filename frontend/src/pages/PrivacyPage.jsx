@@ -87,10 +87,10 @@ const PrivacyPage = () => {
               Pour exercer ces droits, vous pouvez nous contacter à l'adresse
               suivante :{' '}
               <a
-                href="mailto:contact@léomentia-event.fr"
+                href="mailto:contact@leomentia-event.fr"
                 className="text-gold hover:underline"
               >
-                contact@léomentia-event.fr
+                contact@leomentia-event.fr
               </a>
               .
             </p>

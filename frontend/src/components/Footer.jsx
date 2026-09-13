@@ -92,14 +92,14 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:contact@léomentia-event.fr"
+                  href="mailto:contact@leomentia-event.fr"
                   className="flex items-start font-poppins text-cream/70 hover:text-peach transition-colors"
                 >
                   <Mail
                     className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"
                     strokeWidth={1.5}
                   />
-                  contact@léomentia-event.fr
+                  contact@leomentia-event.fr
                 </a>
               </li>
               <li className="flex items-start font-poppins text-cream/70">

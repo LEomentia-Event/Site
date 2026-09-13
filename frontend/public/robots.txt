@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xn--lomentia-event-bkb.fr/sitemap.xml
+Sitemap: https://leomentia-event.fr/sitemap.xml
