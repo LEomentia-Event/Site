@@ -601,11 +601,22 @@ async def stream_drive_file(file_id: str, request: Request):
     if status_code == 206:
         headers["content-range"] = f"bytes {start}-{end}/{file_size}"
 
+    media_type = "video/mp4"
+    try:
+        with open(path, "rb") as fh:
+            head = fh.read(16)
+        if head[:4] == b"\x1aE\xdf\xa3":
+            media_type = "video/webm"
+        elif head[4:8] == b"ftyp":
+            media_type = "video/mp4"
+    except Exception:
+        pass
+
     return StreamingResponse(
         iterator(),
         status_code=status_code,
         headers=headers,
-        media_type="video/mp4",
+        media_type=media_type,
     )
 
 

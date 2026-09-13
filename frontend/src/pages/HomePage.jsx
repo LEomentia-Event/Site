@@ -23,8 +23,8 @@ const HomePage = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef(null);
-  const HERO_VIDEO_ID = '1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u';
-  const HERO_POSTER = `https://drive.google.com/thumbnail?id=${HERO_VIDEO_ID}&sz=w1600`;
+  const HERO_VIDEO_ID = '1AbLHKcd79Fmez_dbjb_oziIUmO09-ac0';
+  const HERO_POSTER = `https://drive.google.com/thumbnail?id=1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u&sz=w1600`;
 
   useEffect(() => {
     const v = videoRef.current;
