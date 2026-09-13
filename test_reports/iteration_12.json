@@ -1,0 +1,24 @@
+{
+  "summary": "Frontend-only test of ScrollToTop fix on Léomentia Event site. Navigated between all top nav tabs after scrolling ~2000px each time; verified window.scrollY resets to near 0 after each route change. Also verified blog article navigation. Fix works as expected.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "HomePage (/)", "issues": ["After navigating to '/' from another page (e.g. /contact) with prior scroll, window.scrollY lands at ~82 instead of 0 (visually still near top / hero visible). Likely caused by post-mount layout shift or hero animation in HomePage; ScrollToTop still fires correctly. Other pages measured 0-9px which is acceptable."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": ["Optional: investigate small residual scroll (~82px) on HomePage after navigation — likely a hero component mounting effect; consider a second scrollTo(0) after images/hero mount or use useLayoutEffect in ScrollToTop."],
+  "critical_code_review_comments": [
+    "ScrollToTop implementation is minimal and correct (useLocation pathname dep). Consider useLayoutEffect to eliminate the brief flash of prior scroll position before repaint.",
+    "Component correctly returns null and is placed inside <BrowserRouter> before <Navigation/> in App.js."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100% for the ScrollToTop fix (all 6 tabs + blog article scroll to top after route change)"},
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Tested tabs testids: nav-link-accueil, nav-link-services, nav-link-galerie, nav-link-témoignages (note accent in testid: label.toLowerCase()), nav-link-blog, nav-link-contact. Blog article /blog/organiser-mariage-sans-stress reached scrollY=0 after nav from scrolled blog list. Viewport 1920x800. No blocking console errors observed.",
+  "rca of the issue": "N/A - fix verified working. Root cause of original bug was React Router not restoring scroll on client-side nav; fixed by ScrollToTop component calling window.scrollTo({top:0}) in useEffect on pathname change."
+}

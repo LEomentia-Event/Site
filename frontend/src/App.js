@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import ScrollToTop from "@/components/ScrollToTop";
 import HomePage from "@/pages/HomePage";
 import ServicesPage from "@/pages/ServicesPage";
 import GalleryPage from "@/pages/GalleryPage";
@@ -20,6 +21,7 @@ function App() {
     <HelmetProvider>
       <div className="App min-h-screen bg-cream">
         <BrowserRouter>
+          <ScrollToTop />
           <Navigation />
           <main>
             <Routes>
