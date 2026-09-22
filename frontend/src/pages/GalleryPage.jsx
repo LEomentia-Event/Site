@@ -2,7 +2,7 @@ import { Seo } from '@/components/Seo';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { X, ChevronLeft, ChevronRight, Play, ArrowLeft, ArrowRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Play, ArrowLeft, ArrowRight, Camera } from 'lucide-react';
 import InteractiveShowcase from '@/components/InteractiveShowcase';
 import axios from 'axios';
 
@@ -29,6 +29,19 @@ const taglineFor = (name) => {
   const n = norm(name);
   const key = Object.keys(UNIVERSE_TAGLINES).find((k) => n.includes(k));
   return key ? UNIVERSE_TAGLINES[key] : 'Une ambiance pensée sur-mesure';
+};
+
+const PHOTO_CREDITS = [
+  { keys: ['printaniere', 'douceur'], name: "L'Instant T" },
+  { keys: ['intimiste'], name: 'Clément Lepan Photographie' },
+  { keys: ['romantisme', 'fleuri'], name: 'Samuel Bocquillon Photographe' },
+  { keys: ['strawberry', 'matcha'], name: 'Samuel Bocquillon Photographe' },
+];
+
+const creditFor = (name) => {
+  const n = norm(name || '');
+  const match = PHOTO_CREDITS.find((c) => c.keys.some((k) => n.includes(k)));
+  return match ? match.name : null;
 };
 
 const GalleryPage = () => {
@@ -242,9 +255,20 @@ const GalleryPage = () => {
             )}
 
             <div className="flex items-end justify-between mb-10">
-              <h2 data-testid="gallery-album-title" className="font-cormorant text-3xl sm:text-4xl text-coffee">
-                {activeAlbum?.name || 'Galerie'}
-              </h2>
+              <div>
+                <h2 data-testid="gallery-album-title" className="font-cormorant text-3xl sm:text-4xl text-coffee">
+                  {activeAlbum?.name || 'Galerie'}
+                </h2>
+                {creditFor(activeAlbum?.name) && (
+                  <p
+                    data-testid="gallery-photo-credit"
+                    className="font-poppins text-xs text-coffee/45 italic mt-1"
+                  >
+                    <Camera className="inline w-3 h-3 mr-1 -mt-0.5" strokeWidth={1.5} />
+                    Crédit photo · {creditFor(activeAlbum?.name)}
+                  </p>
+                )}
+              </div>
               <span data-testid="gallery-photo-count" className="font-poppins text-sm text-coffee/60 whitespace-nowrap">
                 {countLabel(activeAlbum)}
               </span>
@@ -362,6 +386,12 @@ const GalleryPage = () => {
                   referrerPolicy="no-referrer"
                   className="w-full max-h-[80vh] object-contain rounded-lg animate-fade-in"
                 />
+                {creditFor(activeAlbum?.name) && (
+                  <p className="text-center font-poppins text-xs text-white/45 italic mt-3">
+                    <Camera className="inline w-3 h-3 mr-1 -mt-0.5" strokeWidth={1.5} />
+                    Crédit photo · {creditFor(activeAlbum?.name)}
+                  </p>
+                )}
               </div>
             )}
           </div>
