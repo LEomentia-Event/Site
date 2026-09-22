@@ -1,0 +1,27 @@
+{
+  "summary": "Backend-only retest of POST /api/contact after retry hardening + Brevo authenticated domain switch (contact@leomentia-event.fr). Ran 4 pytest cases: (1) 5 consecutive submits all return 200 with email_sent=true AND client_email_sent=true, (2) all 5 leads persisted in Mongo via GET /api/contacts, (3) invalid email -> 422, (4) log inspection confirms retry mechanism works. All 4 tests PASS (4/4). During my run, all 10 emails (5 admin + 5 client) succeeded on attempt 1 — no 401 transient this time. Historical log evidence shows earlier submissions: 4 transient 'Brevo attempt 1 failed (401) unrecognised IP' were each followed by 'sent ... on attempt 2' — retry absorbs Brevo IP-propagation flakiness as designed.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_contact_brevo_retry.py",
+    "/app/backend/tests/test_contact_brevo.py",
+    "/app/test_reports/pytest/contact_brevo_retry.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "send_brevo_email: retry loop (3 attempts, 1.2s sleep) correctly re-tries on any non-2xx AND on exceptions. Handles both transient 401 and network errors.",
+    "Lead persisted BEFORE email send — no data loss even if all 3 retries fail.",
+    "email_sent / client_email_sent flags exposed on response for observability.",
+    "GET /api/contacts uses {'_id': 0} projection — no ObjectId issue.",
+    "Sender is now the authenticated domain contact@leomentia-event.fr — SPF/DKIM aligned, deliverability improved.",
+    "Nit (non-blocking): httpx.AsyncClient is created inside the retry loop per attempt; could hoist for micro-perf, but total time is negligible (<5s max)."
+  ],
+  "updated_files": ["/app/backend/tests/test_contact_brevo_retry.py"],
+  "success_rate": {"backend": "100% (4/4)", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "none required",
+  "seed_data_creation": "5 TEST_-prefixed contacts inserted via POST /api/contact.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Reusable pytest at /app/backend/tests/test_contact_brevo_retry.py. Env: source REACT_APP_BACKEND_URL from /app/frontend/.env before running. Log tail on 22 Sep shows retry recovery pattern working (attempt 1 -> 401 -> attempt 2 -> sent). Owner has disabled Brevo IP allowlist + validated domain leomentia-event.fr; current runs succeed on attempt 1 directly.",
+  "rca of the issue": "Root cause was external: Brevo 'Authorised IPs' setting rejected the container's dynamic egress IP with HTTP 401 'unrecognised IP address'. Client disabled the restriction and authenticated the domain leomentia-event.fr; sender was switched to contact@leomentia-event.fr. Code hardening: send_brevo_email now retries up to 3x with 1.2s backoff to absorb any transient 401 during Brevo IP/config propagation. Verified with 5 consecutive submits — 100% success rate on both admin and client emails."
+}
