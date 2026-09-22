@@ -131,7 +131,7 @@ const ContactPage = () => {
                       Zone d'intervention
                     </p>
                     <p className="font-poppins text-coffee/70">
-                      France entière
+                      Valenciennes & Hauts-de-France
                     </p>
                   </div>
                 </div>
