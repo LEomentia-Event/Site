@@ -186,25 +186,34 @@ async def send_brevo_email(to_email: str, to_name: str, subject: str, html_conte
     }
     if reply_to:
         payload["replyTo"] = reply_to
-    try:
-        async with httpx.AsyncClient(timeout=15) as http_client:
-            resp = await http_client.post(
-                BREVO_API_URL,
-                headers={
-                    "api-key": BREVO_API_KEY,
-                    "content-type": "application/json",
-                    "accept": "application/json",
-                },
-                json=payload,
-            )
-        if resp.status_code in (200, 201):
-            logger.info(f"Brevo email sent to {to_email} ({subject})")
-            return True
-        logger.error(f"Brevo email failed ({resp.status_code}) to {to_email}: {resp.text}")
-        return False
-    except Exception as e:
-        logger.error(f"Failed to send Brevo email to {to_email}: {str(e)}")
-        return False
+    last_status, last_text = None, ""
+    for attempt in range(1, 4):  # up to 3 attempts (handles transient Brevo 401/5xx)
+        try:
+            async with httpx.AsyncClient(timeout=15) as http_client:
+                resp = await http_client.post(
+                    BREVO_API_URL,
+                    headers={
+                        "api-key": BREVO_API_KEY,
+                        "content-type": "application/json",
+                        "accept": "application/json",
+                    },
+                    json=payload,
+                )
+            if resp.status_code in (200, 201):
+                if attempt > 1:
+                    logger.info(f"Brevo email sent to {to_email} on attempt {attempt}")
+                else:
+                    logger.info(f"Brevo email sent to {to_email} ({subject})")
+                return True
+            last_status, last_text = resp.status_code, resp.text
+            logger.warning(f"Brevo attempt {attempt} failed ({resp.status_code}) to {to_email}: {resp.text[:160]}")
+        except Exception as e:
+            last_text = str(e)
+            logger.warning(f"Brevo attempt {attempt} exception to {to_email}: {e}")
+        if attempt < 3:
+            await asyncio.sleep(1.2)
+    logger.error(f"Brevo email failed after retries (last {last_status}) to {to_email}: {last_text[:200]}")
+    return False
 
 
 # Contact endpoints
