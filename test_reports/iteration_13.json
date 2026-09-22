@@ -1,0 +1,33 @@
+{
+  "summary": "Backend-only test of POST /api/contact after the Brevo IP-restriction diagnosis + code hardening. Ran 5 pytest cases against the public REACT_APP_BACKEND_URL: (1) POST returns 200 with all fields incl. email_sent/client_email_sent flags, (2) lead is persisted (found via GET /api/contacts by unique email), (3) no 500 regression on repeated submits, (4) invalid email correctly rejected with 422, (5) backend logs prove the email failure is a Brevo 401 'unrecognised IP address 104.198.214.223' — external account setting, not a code error. All 5 tests PASS.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_contact_brevo.py",
+    "/app/test_reports/pytest/contact_brevo.xml"
+  ],
+  "action_items": [
+    "External (client action): whitelist current outbound IPs in Brevo (Compte > Sécurité > Adresses IP autorisées) OR disable the 'Authorised IPs' security setting — because the container's egress IP changes across restarts (observed: 34.170.12.145, 104.198.214.223, 34.16.56.64), pinning is impractical; recommended to DISABLE the IP allowlist for this API key.",
+    "Optional hardening (main agent, low priority): parse Brevo JSON error and surface a clearer server log tag like 'brevo_ip_blocked' for observability."
+  ],
+  "critical_code_review_comments": [
+    "submit_contact_form correctly persists the lead BEFORE calling Brevo — no leads lost when Brevo rejects. Good.",
+    "send_brevo_email catches exceptions and returns False; endpoint never propagates a 500 on email failure. Good.",
+    "email_sent / client_email_sent flags are booleans returned in the response — useful for frontend/monitoring.",
+    "GET /api/contacts excludes MongoDB _id via projection {'_id': 0} — no ObjectId serialization issue.",
+    "Nit: BREVO_SENDER_EMAIL is a personal gmail address; Brevo strongly recommends a domain-verified sender (SPF/DKIM). Not a blocker but improves deliverability once IP allowlist is fixed."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_contact_brevo.py"
+  ],
+  "success_rate": {"backend": "100% (5/5)", "frontend": "n/a (skipped per request)"},
+  "test_credentials": "none required",
+  "seed_data_creation": "Test contacts inserted with TEST_ prefixed emails via POST /api/contact (kept for regression verification of GET).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Reusable pytest file at /app/backend/tests/test_contact_brevo.py. It hits BASE_URL from REACT_APP_BACKEND_URL and covers the contact endpoint + Brevo log inspection. Recent backend.err.log shows repeated 'Brevo email failed (401) ... unrecognised IP address 104.198.214.223' — confirming the diagnosis. Once the Brevo IP allowlist is disabled/updated by the owner, re-run this test file; email_sent should flip to True and the log assertion will still hold (skipped path).",
+  "rca of the issue": "External root cause: Brevo account has 'Authorised IPs' security enabled. Container egress IPs are dynamic (observed 34.170.12.145, 104.198.214.223, 34.16.56.64), so Brevo rejects every API call from the server with HTTP 401 code=unauthorized, message='We have detected you are using an unrecognised IP address ...'. The code correctly (a) still records every contact submission in MongoDB before attempting email, (b) does not raise 500, (c) returns email_sent=False/client_email_sent=False flags. Mitigation: owner must disable 'Authorised IPs' in Brevo (recommended) or add the current egress IP — but note the IP will change on next redeploy."
+}
