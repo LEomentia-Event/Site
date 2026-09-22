@@ -208,12 +208,13 @@ async def send_brevo_email(to_email: str, to_name: str, subject: str, html_conte
 
 
 # Contact endpoints
-@api_router.post("/contact", response_model=ContactForm)
+@api_router.post("/contact")
 async def submit_contact_form(form_data: ContactFormCreate):
     contact = ContactForm(**form_data.model_dump())
     doc = contact.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
-    
+
+    # Always persist the lead first, so nothing is ever lost even if email fails
     await db.contacts.insert_one(doc)
     
     # 1) Notification email to Virginie
@@ -238,7 +239,7 @@ async def submit_contact_form(form_data: ContactFormCreate):
                 </p>
             </div>
             """
-    await send_brevo_email(
+    admin_sent = await send_brevo_email(
         to_email=RECIPIENT_EMAIL,
         to_name="Virginie Bocquelet",
         subject=f"Nouvelle demande de {contact.name} - Léomentia Event",
@@ -274,7 +275,7 @@ async def submit_contact_form(form_data: ContactFormCreate):
                 </p>
             </div>
             """
-    await send_brevo_email(
+    client_sent = await send_brevo_email(
         to_email=contact.email,
         to_name=contact.name,
         subject="Léomentia Event \u2728 Parlons de votre joli projet",
@@ -282,7 +283,17 @@ async def submit_contact_form(form_data: ContactFormCreate):
         reply_to={"email": RECIPIENT_EMAIL, "name": "Virginie - Léomentia Event"},
     )
 
-    return contact
+    if not admin_sent:
+        logger.error(
+            "LEAD SAVED but notification email NOT sent (Brevo blocked). "
+            "Check Brevo account 'Authorised IPs' security setting."
+        )
+
+    result = contact.model_dump()
+    result['created_at'] = doc['created_at']
+    result['email_sent'] = bool(admin_sent)
+    result['client_email_sent'] = bool(client_sent)
+    return result
 
 @api_router.get("/contacts", response_model=List[ContactForm])
 async def get_contacts():
