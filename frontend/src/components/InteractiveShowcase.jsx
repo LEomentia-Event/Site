@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 // Une photo "en situation" avec des points chauds cliquables reliés aux prestations.
 // Les coordonnées sont en % (x depuis la gauche, y depuis le haut) — faciles à ajuster.
@@ -7,7 +8,7 @@ const DEFAULT_IMAGE =
   'https://drive.google.com/thumbnail?id=16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH&sz=w2000';
 
 const DEFAULT_HOTSPOTS = [
-  { x: 52, y: 22, title: 'Recherche & négociation du lieu', desc: 'Un écrin de caractère qui vous ressemble.' },
+  { x: 52, y: 22, title: 'Recherche & négociation du lieu', desc: 'Un écrin de caractère qui vous ressemble.', link: '/blog/mariage-sur-mesure-lieu-scenographie' },
   { x: 30, y: 72, title: 'Scénographie florale sur-mesure', desc: 'Pampa, roses poudrées et compositions signature.' },
   { x: 50, y: 55, title: 'Art de la table & décoration', desc: 'Vaisselle, bougies et détails raffinés.' },
   { x: 78, y: 48, title: 'Coordination des prestataires', desc: 'Le jour J orchestré, sans le moindre stress.' },
@@ -86,6 +87,16 @@ const InteractiveShowcase = ({
                       {h.title}
                     </p>
                     <p className="font-poppins text-sm text-coffee/70 mt-1">{h.desc}</p>
+                    {h.link && (
+                      <Link
+                        to={h.link}
+                        data-testid={`hotspot-link-${i}`}
+                        className="inline-flex items-center mt-3 font-poppins text-sm text-gold hover:text-gold-dark transition-colors"
+                      >
+                        Lire l'article
+                        <ArrowRight className="w-4 h-4 ml-1" strokeWidth={1.5} />
+                      </Link>
+                    )}
                   </div>
                 )}
               </div>
