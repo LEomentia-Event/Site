@@ -32,7 +32,7 @@ const taglineFor = (name) => {
 };
 
 const PHOTO_CREDITS = [
-  { keys: ['printaniere', 'douceur'], name: "L'Instant T" },
+  { keys: ['printaniere', 'douceur'], name: "L'Instant T Photographie" },
   { keys: ['intimiste'], name: 'Clément Lepan Photographie' },
   { keys: ['romantisme', 'fleuri'], name: 'Samuel Bocquillon Photographe' },
   { keys: ['strawberry', 'matcha'], name: 'Samuel Bocquillon Photographe' },
