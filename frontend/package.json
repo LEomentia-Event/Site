@@ -61,7 +61,7 @@
     "start": "craco start",
     "prebuild": "node scripts/generate-sitemap.js",
     "build": "craco build",
-    "postbuild": "node scripts/prerender.js",
+    "postbuild": "node scripts/prerender.js && node scripts/notify-indexnow.js",
     "test": "craco test"
   },
   "browserslist": {

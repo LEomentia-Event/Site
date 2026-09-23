@@ -67,6 +67,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 
 - ✅ **Sitemap auto-généré au build** : `scripts/generate-sitemap.js` (hook `prebuild`) interroge l'API `/api/blog` et fusionne routes statiques + tous les articles publiés (`/blog/{slug}`, `lastmod` = `created_at`). Chaque nouvel article est indexé sans édition manuelle. Repli sûr non bloquant : si l'API est injoignable, écrit les routes statiques seules + warning (n'échoue jamais le build). Validé : chaîne `prebuild → build → postbuild` OK (12 URLs, 4 blog).
 
+- ✅ **Notification moteurs de recherche (IndexNow)** : `scripts/notify-indexnow.js` (hook `postbuild`, après le prerender) soumet toutes les URLs du sitemap au protocole **IndexNow** (Bing, Yandex, Seznam, Naver…) à chaque build de déploiement → re-crawl quasi instantané. Clé publique `08707e445e5155f0dfbf20c2af8eb784` hébergée à `public/08707e445e5155f0dfbf20c2af8eb784.txt` (validée en 200 sur l'origine). Non bloquant (erreurs loguées, build jamais cassé) ; `INDEXNOW_DRY_RUN=1` pour tester sans envoyer. ⚠️ **Google** : le ping sitemap classique a été supprimé par Google en 2023 (404) et Google n'utilise pas IndexNow → couvert par la directive `Sitemap:` de `robots.txt` + `<lastmod>` exacts + soumission unique dans Search Console (action manuelle recommandée).
+
 ## Backlog / Prochaines actions
 - ✅ (Fait) SEO : sitemap.xml + robots.txt (public/), index.html optimisé (lang fr, title, description, keywords, Open Graph, Twitter, canonical, JSON-LD ProfessionalService), et meta par page via react-helmet-async (composant `src/components/Seo.jsx`, HelmetProvider dans App.js).
 - ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo (notification + confirmation client) — testé e2e.
