@@ -65,6 +65,8 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - ✅ **Nettoyage** : `<meta name="keywords">` supprimé ; image JSON-LD `ProfessionalService` pointée sur `/images/virginie-portrait.webp`.
 - ⚠️ Note déploiement : le build échoue désormais volontairement si Chrome est absent de l'environnement de build/CI (comportement demandé pour être alerté d'une dégradation SEO).
 
+- ✅ **Sitemap auto-généré au build** : `scripts/generate-sitemap.js` (hook `prebuild`) interroge l'API `/api/blog` et fusionne routes statiques + tous les articles publiés (`/blog/{slug}`, `lastmod` = `created_at`). Chaque nouvel article est indexé sans édition manuelle. Repli sûr non bloquant : si l'API est injoignable, écrit les routes statiques seules + warning (n'échoue jamais le build). Validé : chaîne `prebuild → build → postbuild` OK (12 URLs, 4 blog).
+
 ## Backlog / Prochaines actions
 - ✅ (Fait) SEO : sitemap.xml + robots.txt (public/), index.html optimisé (lang fr, title, description, keywords, Open Graph, Twitter, canonical, JSON-LD ProfessionalService), et meta par page via react-helmet-async (composant `src/components/Seo.jsx`, HelmetProvider dans App.js).
 - ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo (notification + confirmation client) — testé e2e.
