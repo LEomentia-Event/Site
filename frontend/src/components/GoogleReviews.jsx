@@ -93,6 +93,9 @@ const GoogleReviews = () => {
                       <img
                         src={r.author_photo}
                         alt={r.author_name}
+                        width="44"
+                        height="44"
+                        loading="lazy"
                         referrerPolicy="no-referrer"
                         className="w-11 h-11 rounded-full object-cover"
                       />

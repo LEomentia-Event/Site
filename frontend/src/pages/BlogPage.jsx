@@ -92,6 +92,9 @@ const BlogPage = () => {
                         <img
                           src={post.image_url}
                           alt={post.couple_names || post.title}
+                          width="800"
+                          height="600"
+                          loading="lazy"
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
@@ -161,6 +164,9 @@ const BlogPage = () => {
                           <img
                             src={post.image_url}
                             alt={post.title}
+                            width="800"
+                            height="450"
+                            loading="lazy"
                             referrerPolicy="no-referrer"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />

@@ -24,7 +24,7 @@ const ServicesPage = () => {
         'Installation et coordination le jour J',
         'Présence de 8h du matin au dernier invité',
       ],
-      image: 'https://drive.google.com/thumbnail?id=1gk4bB4R7TRtbvpZ4lJ7VCuma5xraINNy&sz=w1200',
+      image: '/images/service-complete.webp',
       popular: true,
     },
     {
@@ -43,7 +43,7 @@ const ServicesPage = () => {
         'Suivi jusqu\'au mariage',
         'Coordination le jour J',
       ],
-      image: 'https://drive.google.com/thumbnail?id=1Mf7XU9ALyaMwIr_Tw2cAHkvsODJT1kr9&sz=w1200',
+      image: '/images/service-partial.webp',
       popular: false,
     },
     {
@@ -62,7 +62,7 @@ const ServicesPage = () => {
         'Point de contact unique pour les prestataires',
         'Gestion des imprévus',
       ],
-      image: 'https://drive.google.com/thumbnail?id=1L-GDJvqN-S7b0l4qfTqzoro7kME7C60O&sz=w1200',
+      image: '/images/service-coordination.webp',
       popular: false,
     },
     {
@@ -80,7 +80,7 @@ const ServicesPage = () => {
         'Désinstallation décoration',
         'Accompagnement prestataires',
       ],
-      image: 'https://drive.google.com/thumbnail?id=1_psikxCfOSy_9QrszabVVL9QWXoBNxhN&sz=w1200',
+      image: '/images/service-custom.webp',
       popular: false,
     },
   ];
@@ -146,7 +146,9 @@ const ServicesPage = () => {
                     <img
                       src={service.image}
                       alt={service.title}
-                      referrerPolicy="no-referrer"
+                      width="1200"
+                      height="900"
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
                     {service.popular && (

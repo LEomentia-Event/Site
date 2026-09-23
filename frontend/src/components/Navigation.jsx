@@ -60,6 +60,8 @@ const Navigation = () => {
             <img
               src={lightMode ? logoLight : logoDark}
               alt="Léomentia Event"
+              width="375"
+              height="185"
               className="h-12 sm:h-14 w-auto transition-opacity duration-300"
             />
           </Link>
@@ -129,7 +131,7 @@ const Navigation = () => {
       >
         {/* Menu header with logo + close */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
-          <img src={logoDark} alt="Léomentia Event" className="h-12 w-auto" />
+          <img src={logoDark} alt="Léomentia Event" width="375" height="185" className="h-12 w-auto" />
           <button
             data-testid="mobile-menu-close"
             onClick={() => setIsOpen(false)}

@@ -54,6 +54,17 @@ Site vitrine premium et responsive pour "Léomentia Event" (Wedding Planner & De
 - ✅ Section « Mes accompagnements » : suppression de tous les prix des formules (accueil + Services + options + puces sur-mesure) et mention unique « À partir de 1 200€ ». Vérifié testing_agent (iteration_3, frontend 100%).
 - ✅ Embed Calendly inline (iframe) sur la page Contact (`calendly-embed-section` / `calendly-iframe`) en plus des boutons — charge calendly.com correctement, formulaire de contact toujours fonctionnel. Vérifié testing_agent (iteration_4, frontend 100%).
 
+## SEO & Performance — Optimisations (23/09/2026)
+- ✅ **Images rapatriées en interne (WebP)** : toutes les images d'illustration statiques + images de blog (base de données) sont désormais servies depuis `frontend/public/images/*.webp` (11 images converties en WebP via PIL). Plus aucune dépendance Google Drive/Unsplash/Emergent pour les images fixes. **La galerie « Univers » reste dynamique via Google Drive** (choix utilisateur — synchro auto conservée). Fichiers modifiés : `HomePage.jsx`, `ServicesPage.jsx`, `InteractiveShowcase.jsx`, `BlogPostPage.jsx`, `BlogPage.jsx`, `backend/server.py` (seed) + docs blog en base mises à jour. Vérifié : toutes les images renvoient 200 image/webp sur le preview, héro article rendu OK.
+- ✅ **Prerender sécurisé (fail-loud)** : `postbuild` ne masque plus l'échec (`|| echo` retiré) ; `scripts/prerender.js` sort en `exit 1` avec message clair si Chrome/Chromium absent, si `build/index.html` manque, ou si une route échoue. Build validé (`yarn build` → « OK — 8 routes prerendered »). Chromium présent dans l'env (`/usr/bin/chromium`, `PUPPETEER_EXECUTABLE_PATH`).
+- ✅ **Sitemap complété** : ajout de `/politique-de-confidentialite` et `/mentions-legales` + balise `<lastmod>` sur les 11 URLs.
+- ✅ **Favicon + manifest** : favicon monogramme « L » (or sur café, généré via Chrome depuis la charte) en `favicon.ico` (16/32/48), `favicon-16/32x32.png`, `apple-touch-icon.png` (180), `icon-192/512.png` ; `manifest.json` créé ; balises `<link rel=icon/apple-touch-icon/manifest>` ajoutées dans `index.html`.
+- ✅ **Google Fonts** : `@import` retiré de `index.css`, remplacé par `<link rel="stylesheet">` dans le `<head>` (après les preconnect).
+- ✅ **CLS** : attributs `width`/`height` ajoutés sur toutes les `<img>` (pages + composants, logos nav inclus).
+- ✅ **Lazy loading** : `loading="lazy"` sur les images des sections Services (Home + Services) et cartes Blog (hors héro).
+- ✅ **Nettoyage** : `<meta name="keywords">` supprimé ; image JSON-LD `ProfessionalService` pointée sur `/images/virginie-portrait.webp`.
+- ⚠️ Note déploiement : le build échoue désormais volontairement si Chrome est absent de l'environnement de build/CI (comportement demandé pour être alerté d'une dégradation SEO).
+
 ## Backlog / Prochaines actions
 - ✅ (Fait) SEO : sitemap.xml + robots.txt (public/), index.html optimisé (lang fr, title, description, keywords, Open Graph, Twitter, canonical, JSON-LD ProfessionalService), et meta par page via react-helmet-async (composant `src/components/Seo.jsx`, HelmetProvider dans App.js).
 - ✅ (Fait) Envoi réel des emails du formulaire de contact via Brevo (notification + confirmation client) — testé e2e.

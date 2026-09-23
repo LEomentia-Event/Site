@@ -760,7 +760,7 @@ async def seed_data():
             "wedding_date": "Juin 2024",
             "content": "Virginie nous a permis de vivre notre mariage sans stress. Tout était parfaitement organisé, chaque détail avait été pensé. Nous avons pu profiter pleinement de notre journée grâce à elle.",
             "rating": 5,
-            "image_url": "https://images.unsplash.com/photo-1519741497674-611481863552?w=400",
+            "image_url": "/images/author-virginie.webp",
             "is_featured": True,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
@@ -770,7 +770,7 @@ async def seed_data():
             "wedding_date": "Septembre 2024",
             "content": "Une organisation impeccable du début à la fin. Virginie a su comprendre nos attentes et créer un mariage qui nous ressemblait vraiment. Son professionnalisme et sa bienveillance ont fait toute la différence.",
             "rating": 5,
-            "image_url": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=400",
+            "image_url": "/images/virginie-portrait.webp",
             "is_featured": True,
             "created_at": datetime.now(timezone.utc).isoformat()
         },
@@ -780,7 +780,7 @@ async def seed_data():
             "wedding_date": "Mai 2024",
             "content": "Nous étions débordés par notre travail et l'organisation nous semblait impossible. Virginie a pris les rênes avec une efficacité remarquable. Le jour J, tout s'est déroulé comme dans un rêve.",
             "rating": 5,
-            "image_url": "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400",
+            "image_url": "/images/blog-organiser.webp",
             "is_featured": True,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
@@ -806,7 +806,7 @@ async def seed_data():
 
 <h3>3. Faites-vous accompagner</h3>
 <p>Un wedding planner peut vous faire gagner un temps précieux et vous éviter bien des erreurs. C'est un investissement qui vaut la peine.</p>""",
-            "image_url": "https://drive.google.com/thumbnail?id=1VTubjds0cOH_ptnsddoeymk9LUqSfUpj&sz=w1200",
+            "image_url": "/images/blog-organiser.webp",
             "category": "Organisation",
             "author": "Virginie Bocquelet",
             "is_published": True,
@@ -830,7 +830,7 @@ async def seed_data():
 
 <h3>Ce que vous gagnez</h3>
 <p>Au-delà du temps économisé, un wedding planner vous fait bénéficier de son réseau de prestataires, de tarifs négociés et de son expertise pour éviter les erreurs coûteuses.</p>""",
-            "image_url": "https://drive.google.com/thumbnail?id=1IYERsW0V_4SpYYUYHv9Q_O3TTtk86clG&sz=w1200",
+            "image_url": "/images/blog-cout.webp",
             "category": "Budget",
             "author": "Virginie Bocquelet",
             "is_published": True,
@@ -858,7 +858,7 @@ async def seed_data():
 
 <h3>5. Sous-estimer la fatigue</h3>
 <p>Les derniers jours avant le mariage sont intenses. Gardez de l'énergie pour le jour J !</p>""",
-            "image_url": "https://drive.google.com/thumbnail?id=16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH&sz=w1200",
+            "image_url": "/images/showcase.webp",
             "category": "Conseils",
             "author": "Virginie Bocquelet",
             "is_published": True,
@@ -874,7 +874,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Décoration de table élégante",
             "description": "Une table magnifiquement dressée pour un événement",
-            "image_url": "https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/s5yr64eo_BabyShowerNinie-4%20-%20Copie.jpg",
+            "image_url": "/images/service-complete.webp",
             "category": "Décoration",
             "is_featured": True,
             "order": 1,
@@ -884,7 +884,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Baptême de Léo",
             "description": "Moment de célébration familiale",
-            "image_url": "https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/32g1l3i7_BaptemeLe%CC%81o-49.jpg",
+            "image_url": "/images/service-partial.webp",
             "category": "Événements",
             "is_featured": True,
             "order": 2,
@@ -894,7 +894,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Mariage romantique",
             "description": "Couple heureux lors de leur union",
-            "image_url": "https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/cqg9s9l3_Virginie%20%26%20Alex-490.jpg",
+            "image_url": "/images/author-virginie.webp",
             "category": "Mariages",
             "is_featured": True,
             "order": 3,
@@ -904,7 +904,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Les mariés",
             "description": "Un moment de bonheur capturé",
-            "image_url": "https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/j5xip4br_Virginie%20%26%20Alex-475%20%281%29.jpg",
+            "image_url": "/images/showcase.webp",
             "category": "Mariages",
             "is_featured": True,
             "order": 4,
@@ -914,7 +914,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Décoration lumineuse",
             "description": "Ambiance chaleureuse et intimiste",
-            "image_url": "https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/ihcbo5rj_FB_IMG_1756386454467.jpg",
+            "image_url": "/images/cta-background.webp",
             "category": "Décoration",
             "is_featured": True,
             "order": 5,
@@ -924,7 +924,7 @@ async def seed_data():
             "id": str(uuid.uuid4()),
             "title": "Table de réception",
             "description": "Art de la table raffiné",
-            "image_url": "https://images.unsplash.com/photo-1761110840708-9d6814876068?w=800",
+            "image_url": "/images/service-coordination.webp",
             "category": "Décoration",
             "is_featured": False,
             "order": 6,

@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 
 // Une photo "en situation" avec des points chauds cliquables reliés aux prestations.
 // Les coordonnées sont en % (x depuis la gauche, y depuis le haut) — faciles à ajuster.
-const DEFAULT_IMAGE =
-  'https://drive.google.com/thumbnail?id=16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH&sz=w2000';
+const DEFAULT_IMAGE = '/images/showcase.webp';
 
 const DEFAULT_HOTSPOTS = [
   { x: 52, y: 22, title: 'Recherche & négociation du lieu', desc: 'Un écrin de caractère qui vous ressemble.', link: '/blog/mariage-sur-mesure-lieu-scenographie' },
@@ -43,7 +42,9 @@ const InteractiveShowcase = ({
           <img
             src={image}
             alt="Réalisation Léomentia Event"
-            referrerPolicy="no-referrer"
+            width="2000"
+            height="1334"
+            loading="lazy"
             className="w-full h-auto object-cover select-none"
           />
           <div className="absolute inset-0 bg-coffee/10" />

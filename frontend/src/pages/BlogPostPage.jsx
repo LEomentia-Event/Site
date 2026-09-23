@@ -275,8 +275,11 @@ const BlogPostPage = () => {
             <div className="flex items-center space-x-6 p-8 bg-white rounded-lg border border-coffee/10">
               <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
                 <img
-                  src="https://customer-assets.emergentagent.com/job_elegant-marriage/artifacts/cqg9s9l3_Virginie%20%26%20Alex-490.jpg"
+                  src="/images/author-virginie.webp"
                   alt={post.author}
+                  width="80"
+                  height="80"
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>

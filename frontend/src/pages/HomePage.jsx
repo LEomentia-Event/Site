@@ -24,7 +24,7 @@ const HomePage = () => {
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef(null);
   const HERO_VIDEO_ID = '1AbLHKcd79Fmez_dbjb_oziIUmO09-ac0';
-  const HERO_POSTER = `https://drive.google.com/thumbnail?id=1rD4Rado7s4Vv9se5ZVyHponnJbMPAb9u&sz=w1600`;
+  const HERO_POSTER = '/images/hero-poster.webp';
 
   useEffect(() => {
     const v = videoRef.current;
@@ -69,6 +69,8 @@ const HomePage = () => {
             src={HERO_POSTER}
             alt=""
             aria-hidden="true"
+            width="1080"
+            height="1920"
             className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
           />
           <video
@@ -208,9 +210,11 @@ const HomePage = () => {
             <div className="relative">
               <div className="aspect-[4/5] rounded-lg overflow-hidden img-zoom">
                 <img
-                  src="https://drive.google.com/thumbnail?id=13y4SabSJkFpooUyhS_6GzOf756S8O9BL&sz=w1600"
+                  src="/images/virginie-portrait.webp"
                   alt="Virginie Bocquelet - Wedding Planner & Designer"
-                  referrerPolicy="no-referrer"
+                  width="1200"
+                  height="1799"
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -351,7 +355,7 @@ const HomePage = () => {
                   'Installation et coordination du jour J',
                 ],
                 image:
-                  'https://drive.google.com/thumbnail?id=1gk4bB4R7TRtbvpZ4lJ7VCuma5xraINNy&sz=w1200',
+                  '/images/service-complete.webp',
               },
               {
                 title: 'Organisation partielle & design',
@@ -365,7 +369,7 @@ const HomePage = () => {
                   'Suivi personnalisé',
                 ],
                 image:
-                  'https://drive.google.com/thumbnail?id=1Mf7XU9ALyaMwIr_Tw2cAHkvsODJT1kr9&sz=w1200',
+                  '/images/service-partial.webp',
               },
               {
                 title: 'Coordination jour J',
@@ -379,7 +383,7 @@ const HomePage = () => {
                   'Vous profitez pleinement',
                 ],
                 image:
-                  'https://drive.google.com/thumbnail?id=1L-GDJvqN-S7b0l4qfTqzoro7kME7C60O&sz=w1200',
+                  '/images/service-coordination.webp',
               },
               {
                 title: 'Accompagnement sur mesure',
@@ -393,7 +397,7 @@ const HomePage = () => {
                   'Conseil stratégique',
                 ],
                 image:
-                  'https://drive.google.com/thumbnail?id=1_psikxCfOSy_9QrszabVVL9QWXoBNxhN&sz=w1200',
+                  '/images/service-custom.webp',
               },
             ].map((service, index) => (
               <Card
@@ -404,7 +408,9 @@ const HomePage = () => {
                   <img
                     src={service.image}
                     alt={service.title}
-                    referrerPolicy="no-referrer"
+                    width="1200"
+                    height="900"
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -553,6 +559,9 @@ const HomePage = () => {
                         <img
                           src={testimonial.image_url}
                           alt={testimonial.couple_names}
+                          width="48"
+                          height="48"
+                          loading="lazy"
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -595,7 +604,7 @@ const HomePage = () => {
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url('https://drive.google.com/thumbnail?id=1FRbJBxMw3wjTIyp2jtbw770Y3_r7VSs8&sz=w1920')`,
+              backgroundImage: `url('/images/cta-background.webp')`,
             }}
           ></div>
         </div>
