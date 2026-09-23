@@ -78,3 +78,9 @@ agenthub/agents/youtube/db
 
 # Mobile development
 android-sdk/ backend/media_cache/
+.env
+.env.*
+*.env
+credentials.json
+*.key
+.credentials
