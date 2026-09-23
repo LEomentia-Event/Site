@@ -1,22 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://leomentia-event.fr/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/hero-poster.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/virginie-portrait.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/showcase.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-complete.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-partial.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-coordination.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-custom.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/cta-background.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/services</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-complete.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-partial.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-coordination.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/service-custom.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/galerie</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1yMEBvlmgt9lTYuK20Q4GErDcPE0mkYFq&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1IYERsW0V_4SpYYUYHv9Q_O3TTtk86clG&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1KfkpZnbvAH-yhoJf69Y8I76tdSMK1Prf&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1NLsCagTbEp-4CtFaWexfTKL2BjwzwX5_&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1TD_QBKYXWBZK_CHMufASuvuh1Z8kFBoE&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1z3GBtqKNcmXLGNGU1UwHkyHI-KqbBfsD&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1fI6gu5LMn_7QLSKj-qI5BGqoDqb5FylG&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1SizRqEVxJakiODw8Sau424Ysp0lW-K6-&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=18u3S2YaVbQEm-D0E7uXYeVLnjsHZAFUX&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1_psikxCfOSy_9QrszabVVL9QWXoBNxhN&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1VTubjds0cOH_ptnsddoeymk9LUqSfUpj&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=13aLUA9_t8OT_Ptn2a6YnAQaOLKBvlcCC&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1Mf7XU9ALyaMwIr_Tw2cAHkvsODJT1kr9&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1esjpr84iruzGKXS2cKqEgORXRM0Ioxtx&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=11nygeOoRPaby1GgoxwS3SooiOfxxTGNM&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1k7v_QgDrSheUNAfCpFt8U5C8mmM35AQm&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1GuE11jadBJDLG43qfNB-77bEyt8_MHxh&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1L-GDJvqN-S7b0l4qfTqzoro7kME7C60O&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1bjXFzhyqMr0OV7cjoTaRL0IcNI86da4g&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=151syY4WxwDbCrsCTkN6xAWZX1FZ6ZQ2m&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1VxELz7HTLbC5fU-YJUGU3LU7Lp0urq-A&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=16lEJw1TdJvb6sUBhsX0qM-OZLlRKkjZH&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1euyqi_i5YLhQMtuBEsg6pxD0yQM17ZVr&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1OI08vHjLU413mQpiEdNXn0uHxjan7-Mp&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1voJP1nCJUzsSc2iAYeQ6hmNwzTNbTfWj&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1FraXGY6aNjkGL5V_EI5TMcQdOzUWhJ8Y&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1N0KsAmCDhsGo1WM9po-qJD9qS0cCzckc&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1m7oRZ8Ys-V1f7vmjQ0oxCiQG8hY2mP8e&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1AXFWhsg8gihKxn7qlxfc00HJ8MVZbf7e&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1gfUFPxgFuOarh5tqixjZZ_j4E3RdVywb&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1Saz4TaDgnPd7sjfvL8tN6k1JS_D-B_XN&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1Mjp8jsBFXF1vwqULEbhrZmzFB1DjBnC_&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1alSphDpwQDH0_zrWfTH_Akpuq4jakn74&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1FRbJBxMw3wjTIyp2jtbw770Y3_r7VSs8&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1kv569WssvtWvi0tpNQPg58_JVGgF_vaJ&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1NFeQ89CODr8JFdF55YrufCZHvYy9BOp_&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1gk4bB4R7TRtbvpZ4lJ7VCuma5xraINNy&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1H-PSzYn_q7yMeZi7YjhRU9sJtPbLctej&amp;sz=w2000</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://drive.google.com/thumbnail?id=1vXNhGN6KhD2ExkIWp9fTP5xhoBpQbH0b&amp;sz=w2000</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/temoignages</loc>
@@ -29,6 +183,15 @@
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/blog-organiser.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/blog-cout.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/showcase.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/contact</loc>
@@ -53,23 +216,35 @@
     <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/blog-organiser.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/blog/cout-wedding-planner</loc>
     <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/blog-cout.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/blog/erreurs-eviter-mariage</loc>
     <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/showcase.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://leomentia-event.fr/blog/mariage-sur-mesure-lieu-scenographie</loc>
     <lastmod>2026-09-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://leomentia-event.fr/images/blog-organiser.webp</image:loc>
+    </image:image>
   </url>
 </urlset>
